@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="##  概述​    数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。">
+<meta name="description" content="概述​    数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。">
 <meta name="keywords" content="Android,Java,Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据结构入门">
 <meta property="og:url" content="https://ddssingsong.github.io/数据结构入门/index.html">
 <meta property="og:site_name" content="董大叔的博客">
-<meta property="og:description" content="##  概述​    数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。">
+<meta property="og:description" content="概述​    数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-15T01:59:47.021Z">
+<meta property="og:updated_time" content="2019-04-15T02:02:01.357Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据结构入门">
-<meta name="twitter:description" content="##  概述​    数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。">
+<meta name="twitter:description" content="概述​    数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。">
 
 
 
@@ -350,8 +350,7 @@
       
 
       
-        <p>## </p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>​    数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。 </p>
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>​    数据结构是计算机存储、组织数据的方式。数据结构是指相互之间存在一种或多种特定关系的数据元素的集合。通常情况下，精心选择的数据结构可以带来更高的运行或者存储效率。数据结构往往同高效的检索算法和索引技术有关。 </p>
 <a id="more"></a>
 <h3 id="逻辑结构"><a href="#逻辑结构" class="headerlink" title="逻辑结构"></a>逻辑结构</h3><p>简单说，逻辑结构就是数据之间的关系。而按数据之间的关系来说，逻辑结构大概可以分为两种：<strong>线性结构</strong>和<strong>非线性结构（集合、树、网）</strong>。</p>
 <ul>
@@ -374,7 +373,6 @@
 <h2 id="例：线性表"><a href="#例：线性表" class="headerlink" title="例：线性表"></a>例：线性表</h2><h4 id="1-冒泡排序"><a href="#1-冒泡排序" class="headerlink" title="1. 冒泡排序"></a>1. 冒泡排序</h4><p>（适用于10以内的排序）</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bubbleSort</span><span class="params">(<span class="keyword">int</span>[] array)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 3 1 5 8 2 9 4 6 7 n*(n-1)/2 n</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = array.length - <span class="number">1</span>; i &gt; <span class="number">0</span>; i--) &#123;</span><br><span class="line">		<span class="keyword">boolean</span> flag = <span class="keyword">true</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (array[j] &gt; array[j + <span class="number">1</span>]) &#123;</span><br><span class="line">				<span class="keyword">int</span> temp = array[j];</span><br><span class="line">				array[j] = array[j + <span class="number">1</span>];</span><br><span class="line">				array[j + <span class="number">1</span>] = temp;</span><br><span class="line">				flag = <span class="keyword">false</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (flag) &#123;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="2-选择排序"><a href="#2-选择排序" class="headerlink" title="2. 选择排序"></a>2. 选择排序</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">selectSort</span><span class="params">(<span class="keyword">int</span>[] array)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;array.length-<span class="number">1</span>;i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> index = i;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = i+<span class="number">1</span>; j &lt; array.length; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (array[j] &lt; array[index]) &#123;</span><br><span class="line">                    index = j;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//&#123;1,2,5,8,3,9,4,6,7&#125;;</span></span><br><span class="line">            <span class="keyword">if</span>(index!=i) &#123;<span class="comment">//如果已经是最小的，就不需要交换</span></span><br><span class="line">                <span class="keyword">int</span> temp = array[index];</span><br><span class="line">                array[index] = array[i];</span><br><span class="line">                array[i] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>####</p>
 
       
     </div>
