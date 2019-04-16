@@ -1943,7 +1943,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #55936c;
+  background: #e8ffeb;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3157,20 +3157,20 @@ pre .javascript .function {
 .post-header h1,
 .post-header h2 {
   margin: initial;
+  position: relative;
 }
 .posts-expand .post-title-link {
   line-height: inherit;
 }
 .posts-expand .post-title {
-  position: relative;
-  font-size: 1.5em;
+  font-size: 1.7em;
 }
 .post-body h1 {
-  font-size: 1.2em;
+  font-size: 1.6em;
   border-bottom: 1px solid #eee;
 }
 .post-body h2 {
-  font-size: 1em;
+  font-size: 1.45em;
   border-bottom: 1px solid #eee;
 }
 .post-body h3 {
