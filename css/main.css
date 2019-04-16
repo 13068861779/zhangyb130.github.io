@@ -1943,7 +1943,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #e8ffeb;
+  background: #ff3425;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3157,13 +3157,13 @@ pre .javascript .function {
 .post-header h1,
 .post-header h2 {
   margin: initial;
-  position: relative;
 }
 .posts-expand .post-title-link {
   line-height: inherit;
 }
 .posts-expand .post-title {
   font-size: 1.7em;
+  position: left;
 }
 .post-body h1 {
   font-size: 1.6em;
