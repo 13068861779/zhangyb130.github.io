@@ -129,7 +129,7 @@
   					
   						<li>
 								<a class="nav flat-box" href="/" id="home">
-									<i class="fas fa-grin fa-fw"></i>&nbsp;示例
+									<i class="fas fa-grin fa-fw"></i>&nbsp;博文
 								</a>
 							</li>
       			
@@ -292,10 +292,10 @@
           
         
           
-            <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-09-08T23:31:42+08:00">
+            <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-28T13:39:15+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
-    <p>更新于 2019年9月8日</p>
+    <p>更新于 2019年10月28日</p>
   </a>
 </div>
 
@@ -318,7 +318,7 @@
     <div class="article-entry" itemprop="articleBody">
       <p>现在你可以在文章开头和末尾放置任意支持的meta标签，支持的标签有：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">title</span><br><span class="line">author</span><br><span class="line">date</span><br><span class="line">updated</span><br><span class="line">categories</span><br><span class="line">tags</span><br><span class="line">counter</span><br><span class="line">top</span><br></pre></td></tr></table></figure></p>
 <p>例如本文：</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">blog</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">自定义meta信息</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2019</span><span class="bullet">-04</span><span class="bullet">-06</span></span><br><span class="line"><span class="attr">categories:</span> <span class="string">教程</span></span><br><span class="line"><span class="attr">tags:</span> <span class="string">ss</span></span><br><span class="line"><span class="attr">meta:</span></span><br><span class="line"><span class="attr">  header:</span> <span class="string">[title,</span> <span class="string">author,</span> <span class="string">updated,</span> <span class="string">counter]</span></span><br><span class="line"><span class="attr">  footer:</span> <span class="string">[categories,</span> <span class="string">tags,</span> <span class="string">share]</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">/top/</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">blog</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">自定义meta信息</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2019</span><span class="bullet">-04</span><span class="bullet">-06</span></span><br><span class="line"><span class="attr">categories:</span> <span class="string">[Hexo,教程]</span></span><br><span class="line"><span class="attr">tags:</span> <span class="string">ss</span></span><br><span class="line"><span class="attr">meta:</span></span><br><span class="line"><span class="attr">  header:</span> <span class="string">[title,</span> <span class="string">author,</span> <span class="string">updated,</span> <span class="string">counter]</span></span><br><span class="line"><span class="attr">  footer:</span> <span class="string">[categories,</span> <span class="string">tags,</span> <span class="string">share]</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">/top/</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
 <p>如果不写，就按照主题配置文件中的显示。<br>如果不想显示任何meta标签，就写<code>false</code>，例如关于页面：</p>
 <figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">关于</span></span><br><span class="line"><span class="attr">meta:</span></span><br><span class="line"><span class="attr">  header:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">  footer:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">  placeholder:</span> <span class="string">有什么想对我说的呢？</span></span><br><span class="line"><span class="attr">sidebar:</span> <span class="literal">false</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
       
@@ -624,13 +624,17 @@
     <div class="content pure">
       <ul class="entry">
         
-          <li><a class="flat-box" title="/blog/categories/Dev/" href="/blog/categories/Dev/"><div class="name">Dev</div><div class="badge">(3)</div></a></li>
-        
-          <li><a class="flat-box child" title="/blog/categories/Dev/Hexo/" href="/blog/categories/Dev/Hexo/"><div class="name">Hexo</div><div class="badge">(2)</div></a></li>
+          <li><a class="flat-box" title="/blog/categories/Dev/" href="/blog/categories/Dev/"><div class="name">Dev</div><div class="badge">(1)</div></a></li>
         
           <li><a class="flat-box child" title="/blog/categories/Dev/Shell-Scripts/" href="/blog/categories/Dev/Shell-Scripts/"><div class="name">Shell Scripts</div><div class="badge">(1)</div></a></li>
         
-          <li><a class="flat-box" title="/blog/categories/教程/" href="/blog/categories/教程/"><div class="name">教程</div><div class="badge">(9)</div></a></li>
+          <li><a class="flat-box" title="/blog/categories/Hexo/" href="/blog/categories/Hexo/"><div class="name">Hexo</div><div class="badge">(11)</div></a></li>
+        
+          <li><a class="flat-box child" title="/blog/categories/Hexo/hexo/" href="/blog/categories/Hexo/hexo/"><div class="name">hexo</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box child" title="/blog/categories/Hexo/materialX/" href="/blog/categories/Hexo/materialX/"><div class="name">materialX</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box child" title="/blog/categories/Hexo/教程/" href="/blog/categories/Hexo/教程/"><div class="name">教程</div><div class="badge">(9)</div></a></li>
         
       </ul>
     </div>
@@ -678,7 +682,7 @@
 </header>
 
     <div class="content pure">
-      <a href="/blog/tags/Hexo/" style="font-size: 24px; color: #555">Hexo</a> <a href="/blog/tags/shell/" style="font-size: 24px; color: #555">shell</a> <a href="/blog/tags/ss/" style="font-size: 14px; color: #999">ss</a> <a href="/blog/tags/tips/" style="font-size: 14px; color: #999">tips</a>
+      <a href="/blog/tags/Hexo/" style="font-size: 19px; color: #777">Hexo</a> <a href="/blog/tags/shell/" style="font-size: 19px; color: #777">shell</a> <a href="/blog/tags/ss/" style="font-size: 14px; color: #999">ss</a> <a href="/blog/tags/test/" style="font-size: 24px; color: #555">test</a> <a href="/blog/tags/tips/" style="font-size: 14px; color: #999">tips</a>
     </div>
   </section>
 
