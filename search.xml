@@ -4,6 +4,60 @@
   
     
     <entry>
+      <title>【NDK系列12】编译器 clang gcc g++</title>
+      <link href="/android/ndk/ndk-12/"/>
+      <url>/android/ndk/ndk-12/</url>
+      
+        <content type="html"><![CDATA[<p>了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。</p><a id="more"></a><h2 id="1-gcc-g-clang"><a href="#1-gcc-g-clang" class="headerlink" title="1. gcc/g++/clang"></a>1. gcc/g++/clang</h2><p>了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。</p><h3 id="clang"><a href="#clang" class="headerlink" title="clang"></a>clang</h3><p>clang 是一个<code>C、C++、Object-C</code>的轻量级编译器。基于<code>LLVM</code> （LLVM是以C++编写而成的构架编译器的框架系统，可以说是一个用于开发编译器相关的库）</p><h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><p><code>GNU C</code>编译器。原本只能处理<code>C语言</code>，很快扩展，变得可处理<code>C++</code>。(GNU计划，又称革奴计划。目标是创建一套完全自由的操作系统)</p><h3 id="g"><a href="#g" class="headerlink" title="g++"></a>g++</h3><p><code>GNU c++</code>编译器</p><p>gcc、g++、clang都是编译器。</p><ul><li>gcc和g++都能够编译c/c++，但是编译时候行为不同。</li><li>clang也是一个编译器，对比gcc，它具有编译速度更快、编译产出更小等优点，但是某些软件在使用clang编译时候因为源码中内容的问题会出现错误。</li><li>clang++与clang就相当于gcc与g++。</li></ul><p>对于gcc与g++：</p><ol><li>后缀为<code>.c</code>的源文件，gcc把它当作是C程序，而g++当作是C++程序；后缀为<code>.cpp</code>的，两者都会认为是c++程序</li><li>g++会自动链接c++标准库stl，gcc不会</li><li>gcc不会定义__cplusplus宏，而g++会</li></ol><p><strong>linux</strong>安装gcc</p><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install build-essential #安装gcc、g++与make</span><br></pre></td></tr></table></figure><h2 id="2-编译器过程"><a href="#2-编译器过程" class="headerlink" title="2. 编译器过程"></a>2. 编译器过程</h2><p>一个C/C++文件要经过预处理(preprocessing)、编译(compilation)、汇编(assembly)、和连接(linking)才能变成可执行文件。</p><h3 id="1、预处理"><a href="#1、预处理" class="headerlink" title="1、预处理"></a>1、预处理</h3><p>​     gcc -E main.c  -o main.i </p><p>​     <code>-E</code>的作用是让gcc在预处理结束后停止编译。</p><p>​    预处理阶段主要处理include和define等。它把#include包含进来的.h 文件插入到#include所在的位置，把源程序中使用到的用#define定义的宏用实际的字符串代替</p><h3 id="2、编译阶段"><a href="#2、编译阶段" class="headerlink" title="2、编译阶段"></a>2、<strong>编译阶段</strong></h3><p>​    gcc -S main.i -o main.s</p><p>​     <code>-S</code>的作用是编译后结束，编译生成了汇编文件。</p><p>​    在这个阶段中，gcc首先要检查代码的规范性、是否有语法错误等，以确定代码的实际要做的工作，在检查无误后，gcc把代码翻译成汇编语言。</p><h3 id="3、汇编阶段"><a href="#3、汇编阶段" class="headerlink" title="3、汇编阶段"></a>3、<strong>汇编阶段</strong></h3><p>​    gcc -c main.s -o main.o</p><p>​    汇编阶段把 .s文件翻译成二进制机器指令文件.o,这个阶段接收.c, .i, .s的文件都没有问题。</p><h3 id="4、链接阶段"><a href="#4、链接阶段" class="headerlink" title="4、链接阶段"></a>4、<strong>链接阶段</strong></h3><p>​    gcc -o main main.s</p><p>​    链接阶段，链接的是<strong>函数库</strong>。在main.c中并没有定义”printf”的函数实现，且在预编译中包含进的”stdio.h”中也只有该函数的声明。系统把这些函数实现都被做到名为<code>libc.so</code>的动态库。</p><h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><strong>函数库一般分为静态库和动态库两种</strong></p><ul><li>静态库是指编译链接时，把库文件的代码全部加入到可执行文件中，因此生成的文件比较大，但在运行时也就不再需要库文件了。Linux中后缀名为”.a”。</li><li>动态库与之相反，在编译链接时并没有把库文件的代码加入到可执行文件中，而是在程序执行时由运行时链接文件加载库。Linux中后缀名为”.so”，如前面所述的libc.so就是动态库。gcc在编译时默认使用动态库。</li></ul><blockquote><p>静态库节省时间:不需要再进行动态链接，需要调用的代码直接就在代码内部</p><p>动态库节省空间:如果一个动态库被两个程序调用,那么这个动态库只需要在内存中</p><p>Java中在不经过封装的情况下只能直接使用动态库。</p></blockquote>]]></content>
+      
+      
+      <categories>
+          
+          <category> Android </category>
+          
+          <category> NDK </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> NDK </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>【NDK系列1】基本数据类型和内存格局</title>
+      <link href="/android/ndk/ndk-1/"/>
+      <url>/android/ndk/ndk-1/</url>
+      
+        <content type="html"><![CDATA[<p>作为一个Android开发者，怎能不会NDK开发，下面我们开始我们的NDK之旅</p><a id="more"></a><p>怎么搭建环境我们暂且不管，随心而为</p><h2 id="1-基本数据类型"><a href="#1-基本数据类型" class="headerlink" title="1. 基本数据类型"></a>1. 基本数据类型</h2><p>1.<strong>signed</strong>—有符号，可修饰 char、int。Int是默认有符号的。<br>2.<strong>unsigned</strong>—无符号，可修饰 int 、char</p><table><thead><tr><th style="text-align:left">整型</th><th>字节</th><th>取值范围</th><th>占位</th></tr></thead><tbody><tr><td style="text-align:left">int</td><td>4</td><td>-2,147,483,648 到 2,147,483,647</td><td>%d</td></tr><tr><td style="text-align:left">unsigned int</td><td>4</td><td>0 到 4,294,967,295</td><td>%u</td></tr><tr><td style="text-align:left">short</td><td>2</td><td>-32,768 到 32,767</td><td>%hd</td></tr><tr><td style="text-align:left">unsigned short</td><td>2</td><td>0 到 65,535</td><td>%hu</td></tr><tr><td style="text-align:left">long</td><td>4</td><td>-2,147,483,648 到 2,147,483,647</td><td>%ld</td></tr><tr><td style="text-align:left">unsigned long</td><td>4</td><td>0 到 4,294,967,295</td><td>%lu</td></tr><tr><td style="text-align:left">char</td><td>1</td><td>-128 到 127</td><td>%c</td></tr><tr><td style="text-align:left">unsigned char</td><td>1</td><td>0 到 255</td><td>%c</td></tr></tbody></table><p>为了得到某个类型或某个变量在特定平台上的准确大小，使用 sizeof 运算符。</p><p>表达式 sizeof(type) 得到对象或类型的存储字节大小。</p><p>long int 其实就是长整型 = long 可以省去int</p><p>在标准中,规定 int至少和short一样长，long至少和int一样长。</p><p><strong>问题探究：</strong></p><p><strong>为什么会存在long?</strong></p><p>long和int在早期16位电脑时候 int 2字节，long 4字节，而计算机发展到现在，一般32、64下，long和int一样。和java类比的话，java的long就是 long long 8字节</p><p><strong>格式化显示</strong></p><table><thead><tr><th>浮点型</th><th>字节</th><th>精度</th><th>占位</th></tr></thead><tbody><tr><td>float</td><td>4</td><td>6位小数</td><td>%f</td></tr><tr><td>double</td><td>8</td><td>15位小数</td><td>%lf</td></tr><tr><td>long double</td><td>8</td><td>19位小数</td><td>%Lf</td></tr></tbody></table><p>8进制             %o<br>16进制            小写： %x    大写：%X<br>(0x)+16进制前面     %#x </p><p><strong>其他一些东西</strong></p><p>C99标准以前，C语言里面是没有bool，C++里面才有，<br>C99标准里面定义了bool类型，需要引入头文件stdbool.h<br>bool类型有只有两个值：true =1 、false=0。<br>因此实际上bool就是一个int<br>所以在c/c++中 if 遵循一个规则， 非0为true，非空为true；<br>NULL 其实也就是被define为了 0 </p><h2 id="2-格式化"><a href="#2-格式化" class="headerlink" title="2. 格式化"></a>2. 格式化</h2><p>printf、sprintf等</p><p>将格式化的数据写入第一个参数</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">100</span>];</span><br><span class="line"><span class="built_in">sprintf</span>(str, <span class="string">"img/png_%d.png"</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%s"</span>, str);</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用 0 补到3个字符</span></span><br><span class="line"><span class="built_in">sprintf</span>(str, <span class="string">"img/png_%03d.png"</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%s"</span>, str);</span><br></pre></td></tr></table></figure><h2 id="3-数组与内存布局"><a href="#3-数组与内存布局" class="headerlink" title="3. 数组与内存布局"></a>3. 数组与内存布局</h2><p>数组  ： 连续的内存</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//java</span></span><br><span class="line"><span class="keyword">int</span>[] a</span><br><span class="line"></span><br><span class="line"><span class="comment">//c</span></span><br><span class="line"><span class="comment">//必须声明时候确定大小</span></span><br><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>]  </span><br><span class="line"><span class="comment">//或者 直接初始化 </span></span><br><span class="line"><span class="keyword">int</span> a[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//大小</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d"</span>,<span class="keyword">sizeof</span>(a)/<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br></pre></td></tr></table></figure><p>栈内存限制  linux：ulimit -a 查看<br>但是直接分配这么大不行，因为堆栈可能保存参数，返回地址等等信息</p><p><strong>动态内存申请</strong></p><p><strong>malloc</strong><br>    没有初始化内存的内容,一般调用函数memset来初始化这部分的内存空间.</p><p><strong>calloc</strong><br>    申请内存并将初始化内存数据为NULL.</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> pn = (<span class="keyword">int</span>)<span class="built_in">calloc</span>(<span class="number">10</span>, <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br></pre></td></tr></table></figure><p><strong>realloc</strong></p><p>​     对malloc申请的内存进行大小的调整.</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *a = (<span class="keyword">char</span>*)<span class="built_in">malloc</span>(<span class="number">10</span>);</span><br><span class="line"><span class="built_in">realloc</span>(a,<span class="number">20</span>);</span><br></pre></td></tr></table></figure><p>特别的：<br><strong>alloca</strong><br>    在栈申请内存,因此无需释放.</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *p = (<span class="keyword">int</span> *)alloca(<span class="keyword">sizeof</span>(<span class="keyword">int</span>) * <span class="number">10</span>);</span><br></pre></td></tr></table></figure><p><strong>物理内存</strong><br>    物理内存指通过物理内存条而获得的内存空间</p><p><strong>虚拟内存</strong><br>    一种内存管理技术<br>    电脑中所运行的程序均需经由内存执行，若执行的程序占用内存很大，则会导致内存消耗殆尽。<br>    虚拟内存技术还会匀出一部分硬盘空间来充当内存使用。</p><p><img src="https://img-blog.csdnimg.cn/2019061821310711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTEwNzcwMjc=,size_16,color_FFFFFF,t_70" alt=""></p><p>进程分配内存主要由两个系统调用完成：<strong>brk和mmap</strong> 。</p><ol><li>brk是将_edata(指带堆位置的指针)往高地址推；</li><li>mmap 找一块空闲的虚拟内存。</li></ol><p>通过glibc (C标准库)中提供的malloc函数完成内存申请</p><p>malloc小于128k的内存，使用brk分配内存，将_edata往高地址推,大于128k则使用mmap</p><p>存放程序执行代码（cpu要执行的指令）</p><blockquote><p>栈是向低地址扩展数据结构<br>堆是向高地址扩展数据结构</p></blockquote><h2 id="4-代码收录"><a href="#4-代码收录" class="headerlink" title="4. 代码收录"></a>4. 代码收录</h2><p><a href="https://github.com/ddssingsong/AnyNdk" target="_blank" rel="noopener">https://github.com/ddssingsong/AnyNdk</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Android </category>
+          
+          <category> NDK </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> NDK </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>更自由的布局</title>
       <link href="/example/%E6%9B%B4%E8%87%AA%E7%94%B1%E7%9A%84%E5%B8%83%E5%B1%80/"/>
       <url>/example/%E6%9B%B4%E8%87%AA%E7%94%B1%E7%9A%84%E5%B8%83%E5%B1%80/</url>
@@ -31,11 +85,11 @@
     
     
     <entry>
-      <title>支持多用户</title>
-      <link href="/example/%E5%A4%9A%E7%94%A8%E6%88%B7/"/>
-      <url>/example/%E5%A4%9A%E7%94%A8%E6%88%B7/</url>
+      <title>引用外部文章</title>
+      <link href="/example/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E6%96%87%E7%AB%A0/"/>
+      <url>/example/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E6%96%87%E7%AB%A0/</url>
       
-        <content type="html"><![CDATA[<p>在博客根目录中配置的属性是默认作者：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">author:</span> <span class="string">Mr.X</span></span><br><span class="line"><span class="attr">avatar:</span> <span class="attr">https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png</span></span><br><span class="line"><span class="attr">url:</span> <span class="attr">http://mxclub.github.io</span></span><br></pre></td></tr></table></figure></p><p>在文章的Front-matter中可以配置本篇文章的作者：</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">author:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">xaoxuu</span></span><br><span class="line"><span class="attr">  avatar:</span> <span class="attr">https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png</span></span><br><span class="line"><span class="attr">  url:</span> <span class="attr">https://xaoxuu.com</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure><p>写法示例：</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">blog</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">支持多用户</span></span><br><span class="line"><span class="attr">author:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">xaoxuu</span></span><br><span class="line"><span class="attr">  avatar:</span> <span class="attr">https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png</span></span><br><span class="line"><span class="attr">  url:</span> <span class="attr">https://xaoxuu.com</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2019</span><span class="bullet">-04</span><span class="bullet">-06</span></span><br><span class="line"><span class="attr">categories:</span> <span class="string">[Hexo,教程]</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">/top/</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure><a id="more"></a>]]></content>
+        <content type="html"><![CDATA[<p>只需设置permalink即可：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">author:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">xaoxuu</span></span><br><span class="line"><span class="attr">  avatar:</span> <span class="attr">https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png</span></span><br><span class="line"><span class="attr">  url:</span> <span class="attr">https://xaoxuu.com</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="attr">https://xaoxuu.com/wiki/material-x/</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure></p><p>项目分类中的均为外部文章，<a href="/projects/">前往查看</a>。</p><a id="more"></a>]]></content>
       
       
       <categories>
@@ -79,11 +133,11 @@
     
     
     <entry>
-      <title>引用外部文章</title>
-      <link href="/example/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E6%96%87%E7%AB%A0/"/>
-      <url>/example/%E5%BC%95%E7%94%A8%E5%A4%96%E9%83%A8%E6%96%87%E7%AB%A0/</url>
+      <title>支持多用户</title>
+      <link href="/example/%E5%A4%9A%E7%94%A8%E6%88%B7/"/>
+      <url>/example/%E5%A4%9A%E7%94%A8%E6%88%B7/</url>
       
-        <content type="html"><![CDATA[<p>只需设置permalink即可：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">author:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">xaoxuu</span></span><br><span class="line"><span class="attr">  avatar:</span> <span class="attr">https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png</span></span><br><span class="line"><span class="attr">  url:</span> <span class="attr">https://xaoxuu.com</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="attr">https://xaoxuu.com/wiki/material-x/</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure></p><p>项目分类中的均为外部文章，<a href="/projects/">前往查看</a>。</p><a id="more"></a>]]></content>
+        <content type="html"><![CDATA[<p>在博客根目录中配置的属性是默认作者：<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">author:</span> <span class="string">Mr.X</span></span><br><span class="line"><span class="attr">avatar:</span> <span class="attr">https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png</span></span><br><span class="line"><span class="attr">url:</span> <span class="attr">http://mxclub.github.io</span></span><br></pre></td></tr></table></figure></p><p>在文章的Front-matter中可以配置本篇文章的作者：</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">author:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">xaoxuu</span></span><br><span class="line"><span class="attr">  avatar:</span> <span class="attr">https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png</span></span><br><span class="line"><span class="attr">  url:</span> <span class="attr">https://xaoxuu.com</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure><p>写法示例：</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">type:</span> <span class="string">blog</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">支持多用户</span></span><br><span class="line"><span class="attr">author:</span></span><br><span class="line"><span class="attr">  name:</span> <span class="string">xaoxuu</span></span><br><span class="line"><span class="attr">  avatar:</span> <span class="attr">https://cdn.jsdelivr.net/gh/xaoxuu/assets@master/avatar/avatar.png</span></span><br><span class="line"><span class="attr">  url:</span> <span class="attr">https://xaoxuu.com</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2019</span><span class="bullet">-04</span><span class="bullet">-06</span></span><br><span class="line"><span class="attr">categories:</span> <span class="string">[Hexo,教程]</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">/top/</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure><a id="more"></a>]]></content>
       
       
       <categories>
@@ -121,32 +175,11 @@
     
     
     <entry>
-      <title>共用一个评论框</title>
-      <link href="/example/%E5%85%B1%E7%94%A8%E4%B8%80%E4%B8%AA%E8%AF%84%E8%AE%BA%E6%A1%86/"/>
-      <url>/example/%E5%85%B1%E7%94%A8%E4%B8%80%E4%B8%AA%E8%AF%84%E8%AE%BA%E6%A1%86/</url>
+      <title>文章专属BGM</title>
+      <link href="/example/%E6%96%87%E7%AB%A0%E4%B8%93%E5%B1%9EBGM/"/>
+      <url>/example/%E6%96%87%E7%AB%A0%E4%B8%93%E5%B1%9EBGM/</url>
       
-        <content type="html"><![CDATA[<p>写法示例：</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">共用一个评论框</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">/top/</span></span><br><span class="line"><span class="attr">  placeholder:</span> <span class="string">你觉得共用一个评论框有意义吗？</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure><a id="more"></a>]]></content>
-      
-      
-      <categories>
-          
-          <category> Hexo </category>
-          
-          <category> 教程 </category>
-          
-      </categories>
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>置顶：博客源码</title>
-      <link href="/example/top/"/>
-      <url>/example/top/</url>
-      
-        <content type="html"><![CDATA[<p>文章的Front-matter填写<code>top: true</code>就置顶了。<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">top:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p><p>这是一个示例博客。源码目录：<a href="https://github.com/xaoxuu/blog-example" target="_blank" rel="noopener">https://github.com/xaoxuu/blog-example</a></p><a id="more"></a><p><img class="emoji tieba" src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1.0/img/tieba/捂嘴笑.png">没有更多了哦。</p>]]></content>
+        <content type="html"><![CDATA[<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">文章专属BGM</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2018</span><span class="bullet">-12</span><span class="bullet">-30</span></span><br><span class="line"><span class="attr">music:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">song</span>        <span class="comment"># song （单曲） album （专辑） playlist （歌单） search （搜索）</span></span><br><span class="line"><span class="attr">  id:</span> <span class="number">26664345</span>      <span class="comment"># 歌曲/专辑/歌单 ID</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure><p>详情见文档：<a href="https://xaoxuu.com/wiki/material-x/third-party-services/" target="_blank" rel="noopener">https://xaoxuu.com/wiki/material-x/third-party-services/</a></p><a id="more"></a>]]></content>
       
       
       <categories>
@@ -184,11 +217,11 @@
     
     
     <entry>
-      <title>文章专属BGM</title>
-      <link href="/example/%E6%96%87%E7%AB%A0%E4%B8%93%E5%B1%9EBGM/"/>
-      <url>/example/%E6%96%87%E7%AB%A0%E4%B8%93%E5%B1%9EBGM/</url>
+      <title>置顶：博客源码</title>
+      <link href="/example/top/"/>
+      <url>/example/top/</url>
       
-        <content type="html"><![CDATA[<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">文章专属BGM</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2018</span><span class="bullet">-12</span><span class="bullet">-30</span></span><br><span class="line"><span class="attr">music:</span></span><br><span class="line"><span class="attr">  type:</span> <span class="string">song</span>        <span class="comment"># song （单曲） album （专辑） playlist （歌单） search （搜索）</span></span><br><span class="line"><span class="attr">  id:</span> <span class="number">26664345</span>      <span class="comment"># 歌曲/专辑/歌单 ID</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure><p>详情见文档：<a href="https://xaoxuu.com/wiki/material-x/third-party-services/" target="_blank" rel="noopener">https://xaoxuu.com/wiki/material-x/third-party-services/</a></p><a id="more"></a>]]></content>
+        <content type="html"><![CDATA[<p>文章的Front-matter填写<code>top: true</code>就置顶了。<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">top:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p><p>这是一个示例博客。源码目录：<a href="https://github.com/xaoxuu/blog-example" target="_blank" rel="noopener">https://github.com/xaoxuu/blog-example</a></p><a id="more"></a><p><img class="emoji tieba" src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1.0/img/tieba/捂嘴笑.png">没有更多了哦。</p>]]></content>
       
       
       <categories>
@@ -205,27 +238,21 @@
     
     
     <entry>
-      <title>vim-cn.sh</title>
-      <link href="/https://xaoxuu.com/wiki/vim-cn.sh//"/>
-      <url>/https://xaoxuu.com/wiki/vim-cn.sh//</url>
+      <title>共用一个评论框</title>
+      <link href="/example/%E5%85%B1%E7%94%A8%E4%B8%80%E4%B8%AA%E8%AF%84%E8%AE%BA%E6%A1%86/"/>
+      <url>/example/%E5%85%B1%E7%94%A8%E4%B8%80%E4%B8%AA%E8%AF%84%E8%AE%BA%E6%A1%86/</url>
       
-        <content type="html"><![CDATA[<p><a href="https://img.vim-cn.com" target="_blank" rel="noopener">img.vim-cn.com</a>是一个十分干净好用的图床，本站以及博客中的所有图片都是使用的这个图床。</p><p>所以，这是一个快速批量<strong>上传图片</strong>的脚本。</p><p><fancybox><img src="https://img.vim-cn.com/0d/e463788b9eb82f82b551d8da1cd4cbae9d64cb.png" alt=""><fancybox></fancybox></fancybox></p><a id="more"></a>]]></content>
+        <content type="html"><![CDATA[<p>写法示例：</p><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">共用一个评论框</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line"><span class="attr">  path:</span> <span class="string">/top/</span></span><br><span class="line"><span class="attr">  placeholder:</span> <span class="string">你觉得共用一个评论框有意义吗？</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure><a id="more"></a>]]></content>
       
       
       <categories>
           
-          <category> Dev </category>
+          <category> Hexo </category>
           
-          <category> Shell Scripts </category>
+          <category> 教程 </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> shell </tag>
-            
-        </tags>
       
     </entry>
     

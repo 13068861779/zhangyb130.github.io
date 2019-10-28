@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
-  <title>Category: Dev | 哒哒瑟</title>
+  <title>【NDK系列12】编译器 clang gcc g++ | 哒哒瑟</title>
   
   <meta name="keywords" content="Android,Java,Linux">
   
@@ -57,61 +57,7 @@
 <body>
   
   
-  <div class="cover-wrapper">
-    <cover class="cover  half">
-      
-        
-  <h1 class="title">哒哒瑟</h1>
-
-
-  <div class="m_search">
-    <form name="searchform" class="form u-search-form">
-      <input type="text" class="input u-search-input" placeholder="">
-      <i class="icon fas fa-search fa-fw"></i>
-    </form>
-  </div>
-
-<div class="menu navgation">
-  <ul class="h-list">
-    
-      
-        <li>
-          <a class="nav home" href="/" id="home">
-            <i class="fas fa-rss fa-fw"></i>&nbsp;博文
-          </a>
-        </li>
-      
-        <li>
-          <a class="nav home" href="/projects/" id="projects">
-            <i class="fas fa-code-branch fa-fw"></i>&nbsp;项目
-          </a>
-        </li>
-      
-        <li>
-          <a class="nav home" href="https://blog.csdn.net/u011077027/" rel="nofollow" id="https:blog.csdn.netu011077027">
-            <i class="fas fa-link fa-fw"></i>&nbsp;csdn
-          </a>
-        </li>
-      
-        <li>
-          <a class="nav home" href="https://github.com/ddssingsong/" rel="nofollow" id="https:github.comddssingsong">
-            <i class="fab fa-github-alt fa-fw"></i>&nbsp;github
-          </a>
-        </li>
-      
-        <li>
-          <a class="nav home" href="/about/" rel="nofollow" id="about">
-            <i class="fas fa-info-circle fa-fw"></i>&nbsp;关于
-          </a>
-        </li>
-      
-    
-  </ul>
-</div>
-
-      
-    </cover>
-    <header class="l_header pure">
+  <header class="l_header pure">
   <div id="loading-bar-wrapper">
     <div id="loading-bar" class="pure"></div>
   </div>
@@ -219,30 +165,15 @@
 	</aside>
 <script>setLoadingBarProgress(40);</script>
 
-  </div>
 
 
-  <div class="l_body">
+  <div class="l_body nocover">
     <div class='body-wrapper'>
-      
-<div class="l_main">
+      <div class="l_main">
   
+
+  <article id="post" class="post white-box article-type-post" itemscope="" itemprop="blogPost">
     
-      
-  <section class="post-list">
-    
-      
-        
-          
-        
-      
-    
-    
-      
-        
-          <div class="post-wrapper">
-            <article class="post reveal ">
-  
 
 
   <section class="meta">
@@ -251,11 +182,13 @@
     <div class="meta" id="header-meta">
       
         
-  <h2 class="title">
-    <a href="https://xaoxuu.com/wiki/vim-cn.sh//">
-      vim-cn.sh
-    </a>
-  </h2>
+  
+    <h1 class="title">
+      <a href="/android/ndk/ndk-12/">
+        【NDK系列12】编译器 clang gcc g++
+      </a>
+    </h1>
+  
 
 
       
@@ -283,7 +216,7 @@
             <div class="new-meta-item date">
   <a class="notlink">
     <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-    <p>2018-09-22</p>
+    <p>2019-10-28</p>
   </a>
 </div>
 
@@ -293,11 +226,29 @@
             
   
   <div class="new-meta-item category">
-    <a href="/blog/categories/Dev/Shell-Scripts/" rel="nofollow">
+    <a href="/blog/categories/Android/NDK/" rel="nofollow">
       <i class="fas fa-folder-open" aria-hidden="true"></i>
-      <p>Dev&nbsp;/&nbsp;Shell Scripts</p>
+      <p>Android&nbsp;/&nbsp;NDK</p>
     </a>
   </div>
+
+
+          
+        
+          
+            
+  
+    <div class="new-meta-item browse busuanzi">
+      <a class="notlink">
+        <i class="fas fa-eye" aria-hidden="true"></i>
+        <p>
+          <span id="busuanzi_value_page_pv">
+            <i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i>
+          </span>
+        </p>
+      </a>
+    </div>
+  
 
 
           
@@ -315,253 +266,198 @@
   </section>
 
 
-  <section class="article typo">
-    <div class="article-entry" itemprop="articleBody">
-      <p><a href="https://img.vim-cn.com" target="_blank" rel="noopener">img.vim-cn.com</a>是一个十分干净好用的图床，本站以及博客中的所有图片都是使用的这个图床。</p>
-<p>所以，这是一个快速批量<strong>上传图片</strong>的脚本。</p>
-<p><fancybox><img src="https://img.vim-cn.com/0d/e463788b9eb82f82b551d8da1cd4cbae9d64cb.png" alt=""><fancybox></fancybox></fancybox></p>
+    <section class="article typo">
+      <div class="article-entry" itemprop="articleBody">
+        <p>了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。</p>
+<a id="more"></a>
+<h2 id="1-gcc-g-clang"><a href="#1-gcc-g-clang" class="headerlink" title="1. gcc/g++/clang"></a>1. gcc/g++/clang</h2><p>了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。</p>
+<h3 id="clang"><a href="#clang" class="headerlink" title="clang"></a>clang</h3><p>clang 是一个<code>C、C++、Object-C</code>的轻量级编译器。基于<code>LLVM</code> （LLVM是以C++编写而成的构架编译器的框架系统，可以说是一个用于开发编译器相关的库）</p>
+<h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><p><code>GNU C</code>编译器。原本只能处理<code>C语言</code>，很快扩展，变得可处理<code>C++</code>。(GNU计划，又称革奴计划。目标是创建一套完全自由的操作系统)</p>
+<h3 id="g"><a href="#g" class="headerlink" title="g++"></a>g++</h3><p><code>GNU c++</code>编译器</p>
+<p>gcc、g++、clang都是编译器。</p>
+<ul>
+<li>gcc和g++都能够编译c/c++，但是编译时候行为不同。</li>
+<li>clang也是一个编译器，对比gcc，它具有编译速度更快、编译产出更小等优点，但是某些软件在使用clang编译时候因为源码中内容的问题会出现错误。</li>
+<li>clang++与clang就相当于gcc与g++。</li>
+</ul>
+<p>对于gcc与g++：</p>
+<ol>
+<li>后缀为<code>.c</code>的源文件，gcc把它当作是C程序，而g++当作是C++程序；后缀为<code>.cpp</code>的，两者都会认为是c++程序</li>
+<li>g++会自动链接c++标准库stl，gcc不会</li>
+<li>gcc不会定义__cplusplus宏，而g++会</li>
+</ol>
+<p><strong>linux</strong>安装gcc</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install build-essential #安装gcc、g++与make</span><br></pre></td></tr></table></figure>
+<h2 id="2-编译器过程"><a href="#2-编译器过程" class="headerlink" title="2. 编译器过程"></a>2. 编译器过程</h2><p>一个C/C++文件要经过预处理(preprocessing)、编译(compilation)、汇编(assembly)、和连接(linking)才能变成可执行文件。</p>
+<h3 id="1、预处理"><a href="#1、预处理" class="headerlink" title="1、预处理"></a>1、预处理</h3><p>​     gcc -E main.c  -o main.i </p>
+<p>​     <code>-E</code>的作用是让gcc在预处理结束后停止编译。</p>
+<p>​    预处理阶段主要处理include和define等。它把#include包含进来的.h 文件插入到#include所在的位置，把源程序中使用到的用#define定义的宏用实际的字符串代替</p>
+<h3 id="2、编译阶段"><a href="#2、编译阶段" class="headerlink" title="2、编译阶段"></a>2、<strong>编译阶段</strong></h3><p>​    gcc -S main.i -o main.s</p>
+<p>​     <code>-S</code>的作用是编译后结束，编译生成了汇编文件。</p>
+<p>​    在这个阶段中，gcc首先要检查代码的规范性、是否有语法错误等，以确定代码的实际要做的工作，在检查无误后，gcc把代码翻译成汇编语言。</p>
+<h3 id="3、汇编阶段"><a href="#3、汇编阶段" class="headerlink" title="3、汇编阶段"></a>3、<strong>汇编阶段</strong></h3><p>​    gcc -c main.s -o main.o</p>
+<p>​    汇编阶段把 .s文件翻译成二进制机器指令文件.o,这个阶段接收.c, .i, .s的文件都没有问题。</p>
+<h3 id="4、链接阶段"><a href="#4、链接阶段" class="headerlink" title="4、链接阶段"></a>4、<strong>链接阶段</strong></h3><p>​    gcc -o main main.s</p>
+<p>​    链接阶段，链接的是<strong>函数库</strong>。在main.c中并没有定义”printf”的函数实现，且在预编译中包含进的”stdio.h”中也只有该函数的声明。系统把这些函数实现都被做到名为<code>libc.so</code>的动态库。</p>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><strong>函数库一般分为静态库和动态库两种</strong></p>
+<ul>
+<li>静态库是指编译链接时，把库文件的代码全部加入到可执行文件中，因此生成的文件比较大，但在运行时也就不再需要库文件了。Linux中后缀名为”.a”。</li>
+<li>动态库与之相反，在编译链接时并没有把库文件的代码加入到可执行文件中，而是在程序执行时由运行时链接文件加载库。Linux中后缀名为”.so”，如前面所述的libc.so就是动态库。gcc在编译时默认使用动态库。</li>
+</ul>
+<blockquote>
+<p>静态库节省时间:不需要再进行动态链接，需要调用的代码直接就在代码内部</p>
+<p>动态库节省空间:如果一个动态库被两个程序调用,那么这个动态库只需要在内存中</p>
+<p>Java中在不经过封装的情况下只能直接使用动态库。</p>
+</blockquote>
+
+      </div>
       
-        <div class="readmore">
-          <a href="https://xaoxuu.com/wiki/vim-cn.sh//" class="flat-box">
-            <i class="fas fa-book-open fa-fw" aria-hidden="true"></i>
-            阅读全文
-          </a>
-        </div>
+        <br>
+        
+
+
+  <section class="meta" id="footer-meta">
+    <div class="new-meta-box">
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-28T17:28:15+08:00">
+  <a class="notlink">
+    <i class="fas fa-clock" aria-hidden="true"></i>
+    <p>更新于 2019年10月28日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/blog/tags/NDK/" rel="nofollow"><i class="fas fa-tag" aria-hidden="true"></i><p>NDK</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://ddssingsong.github.io/android/ndk/ndk-12/&title=【NDK系列12】编译器 clang gcc g++ | 哒哒瑟&summary=了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。">
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://ddssingsong.github.io/android/ndk/ndk-12/&title=【NDK系列12】编译器 clang gcc g++ | 哒哒瑟&summary=了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。">
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="qrcode" rel="external nofollow noopener noreferrer" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMElEQVR42u3ay07DMBAF0P7/T5ctEgrcOw6I2MerKkpdny5GnsfrFa/3l/X5+dU7X9+/2vPqyc0LAwPjsYzk55PDJc9bdvHXYGBgHMC4imCzd9owmuzzw5kxMDAwgkPcFToxMDAw7mK0CWeyw/dJMgYGBkYSLvNrXx528/1vy8UxMDAeyGjD5V9+/pX+BgYGxqMY73LNrnR5O2G2MDAw9mbkAW6lbZk0QduAi4GBcQ6jLagl5bCk3N+Ohf0Aw8DA2JoxG4yYNThXAvf3fwQGBsYJjLb4NUtf10t7UQMVAwNjO8ZsJGvGS0pswxEQDAyMrRlt4Swv688Cbj6csVQXxMDAeDgjKY3lW7dt0TYBLm64GBgYj2XMEtQ2pLYBN78gYmBgnMDIC21t0JyV4dqgX9cLMTAwHsjIByDalHUWgttBDQwMjBMYRYczTkpnQTYfOIswGBgYWzPyZsBSo3HUoqgTYwwMjC0Ys9ZjfjXM0+DZsAUGBsYJjPXRhyQNXg+1KwMcGBgYezBWUs3ZIfIAnX/GwMA4h9FeGWeNyVk5bzipgYGBsREj/0JebmvBS+fEwMDYlPEu16zo1pbP2ssiBgbG3oz16npenmsLdsnRb2sSYGBg/HvG+oBXHnZXAm49coGBgbEdo01WZ/g87A5TWQwMDIybAnQSWJOw/kquuxgYGEcykotdO06R73lJwsDAOICR/OQsWc3T0ZaKgYFxDiNPHduuQluwuwuJgYGxEeMDmlVBz+DRy2QAAAAASUVORK5CYII=">
+        
+          <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/wechat.png">
+        
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://ddssingsong.github.io/android/ndk/ndk-12/&title=【NDK系列12】编译器 clang gcc g++ | 哒哒瑟&summary=了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。">
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
       
     </div>
-    
-      <div class="full-width auto-padding tags">
-        
-          <a href="/blog/tags/shell/" rel="nofollow"><i class="fas fa-tag fa-fw"></i> shell</a>
-        
-      </div>
-    
   </section>
-</article>
 
-          </div>
-        
+
       
-    
-  </section>
-  
-    
-    <!-- 根据主题中的设置决定是否在archive中针对摘要部分的MathJax公式加载mathjax.js文件 -->
-    
-    
+      
+          <div class="prev-next">
+              
+              
+                  <section class="next">
+                      <span class="art-item-right" aria-hidden="true">
+                          <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                          <h4>
+                              <a href="/android/ndk/ndk-1/" rel="prev" title="【NDK系列1】基本数据类型和内存格局">
+                                  
+                                      【NDK系列1】基本数据类型和内存格局
+                                  
+                              </a>
+                          </h4>
+                          
+                              
+                              <h6 class="tags">
+                                  <a class="tag" href="/blog/tags/NDK/"><i class="fas fa-tag fa-fw" aria-hidden="true"></i> NDK</a>
+                              </h6>
+                          
+                      </span>
+                  </section>
+              
+          </div>
+      
+    </section>
+  </article>
 
-  
 
 
-    
-  
+  <!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box comments">
+    <section class="article typo">
+      <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+      
+      
+      
+      
+        <section id="comments">
+          <div id="valine_container" class="valine_thread">
+            <i class="fas fa-spinner fa-spin fa-fw"></i>
+          </div>
+        </section>
+      
+    </section>
+  </article>
+
+
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: '【NDK系列12】编译器 clang gcc g++',
+      tools: true
+    }
+  </script>
+
 
 </div>
 <aside class="l_side">
   
     
     
-      
-      
-        
-          
-          
-            
-              <section class="widget author">
-  <div class="content pure">
-    
-      <div class="avatar">
-        <img class="avatar" src="https://avatars0.githubusercontent.com/u/13553838?s=460&v=4">
-      </div>
-    
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="mailto:ddssingsong@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="https://github.com/ddssingsong" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="https://music.163.com/#/song?id=523696075" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
-
-            
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-      
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-            
-              <section class="widget list">
-  
-<header class="pure">
-  <div><i class="fas fa-thumbs-up fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;强烈推荐</div>
-  
-</header>
-
-  <div class="content pure">
-    <ul class="entry">
-      
-        <li><a class="flat-box" title="https://yasuotu.com" href="https://yasuotu.com">
-          <div class="name">
-            
-              <i class=" fa-fw" aria-hidden="true"></i>
-            
-            &nbsp;&nbsp;图片在线压缩
-          </div>
-          
-        </a></li>
-      
-        <li><a class="flat-box" title="https://realfavicongenerator.net" href="https://realfavicongenerator.net">
-          <div class="name">
-            
-              <i class=" fa-fw" aria-hidden="true"></i>
-            
-            &nbsp;&nbsp;生成Favicon
-          </div>
-          
-        </a></li>
-      
-        <li><a class="flat-box" title="https://ddssingsong.github.io/resume/" href="https://ddssingsong.github.io/resume/">
-          <div class="name">
-            
-              <i class=" fa-fw" aria-hidden="true"></i>
-            
-            &nbsp;&nbsp;简历主题
-          </div>
-          
-        </a></li>
-      
-    </ul>
-  </div>
-</section>
-
-            
-          
-        
-      
-        
-          
-          
-        
-          
-          
-        
-          
-          
-            
-              <section class="widget grid">
-  
-<header class="pure">
-  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
-  
-</header>
-
-  <div class="content pure">
-    <ul class="grid navgation">
-      
-        <li><a class="flat-box" title="/" href="/" id="home">
-          
-            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
-          
-          近期文章
-        </a></li>
-      
-        <li><a class="flat-box" title="/blog/archives/" href="/blog/archives/" rel="nofollow" id="blogarchives">
-          
-            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
-          
-          文章归档
-        </a></li>
-      
-        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
-          
-            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
-          
-          开源项目
-        </a></li>
-      
-        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
-          
-            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
-          
-          关于小站
-        </a></li>
-      
-    </ul>
-  </div>
-</section>
-
-            
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
       
         
           
@@ -590,9 +486,9 @@
     <div class="content pure">
       <ul class="entry">
         
-          <li><a class="flat-box" title="/blog/categories/Dev/" href="/blog/categories/Dev/"><div class="name">Dev</div><div class="badge">(1)</div></a></li>
+          <li><a class="flat-box" title="/blog/categories/Android/" href="/blog/categories/Android/"><div class="name">Android</div><div class="badge">(2)</div></a></li>
         
-          <li><a class="flat-box child" title="/blog/categories/Dev/Shell-Scripts/" href="/blog/categories/Dev/Shell-Scripts/"><div class="name">Shell Scripts</div><div class="badge">(1)</div></a></li>
+          <li><a class="flat-box child" title="/blog/categories/Android/NDK/" href="/blog/categories/Android/NDK/"><div class="name">NDK</div><div class="badge">(2)</div></a></li>
         
           <li><a class="flat-box" title="/blog/categories/Hexo/" href="/blog/categories/Hexo/"><div class="name">Hexo</div><div class="badge">(11)</div></a></li>
         
@@ -626,34 +522,33 @@
         
           
           
-        
-          
-          
-        
-          
-          
-        
-          
-          
             
               
-  <section class="widget tagcloud">
+  <section class="widget toc-wrapper">
     
 <header class="pure">
-  <div><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;本文目录</div>
   
-    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
-    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+    <!-- <div class='wrapper'><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div> -->
   
 </header>
 
     <div class="content pure">
-      <a href="/blog/tags/Hexo/" style="font-size: 19px; color: #777">Hexo</a> <a href="/blog/tags/shell/" style="font-size: 19px; color: #777">shell</a> <a href="/blog/tags/ss/" style="font-size: 14px; color: #999">ss</a> <a href="/blog/tags/test/" style="font-size: 24px; color: #555">test</a> <a href="/blog/tags/tips/" style="font-size: 14px; color: #999">tips</a>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-gcc-g-clang"><span class="toc-text">1. gcc/g++/clang</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#clang"><span class="toc-text">clang</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gcc"><span class="toc-text">gcc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#g"><span class="toc-text">g++</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-编译器过程"><span class="toc-text">2. 编译器过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、预处理"><span class="toc-text">1、预处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、编译阶段"><span class="toc-text">2、编译阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、汇编阶段"><span class="toc-text">3、汇编阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、链接阶段"><span class="toc-text">4、链接阶段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-text">其他</span></a></li></ol>
     </div>
   </section>
 
 
             
+          
+        
+          
+          
+        
+          
+          
+        
+          
           
         
           
@@ -800,6 +695,36 @@
 
 
 
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+    
+      <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1.0.6/js/volantis.min.js"></script>
+    
+  
+  <script>
+  var GUEST_INFO = ['nick','mail','link'];
+  var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+    return GUEST_INFO.indexOf(item) > -1
+  });
+  var notify = 'true' == true;
+  var verify = 'true' == true;
+  var valine = new Valine();
+  valine.init({
+    el: '#valine_container',
+    notify: notify,
+    verify: verify,
+    guest_info: guest_info,
+    
+    appId: "StY0COESh8VDhgtMxTvWGoKm-gzGzoHsz",
+    appKey: "EIDNpekxDzlRSLk36J1yYqGX",
+    placeholder: "快来评论吧~",
+    pageSize:'10',
+    avatar:'mp',
+    lang:'zh-cn',
+    highlight:'true'
+  })
+  </script>
 
 
 
