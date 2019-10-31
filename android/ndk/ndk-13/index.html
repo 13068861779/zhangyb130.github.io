@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
-  <title>post | 哒哒瑟</title>
+  <title>【NDK系列13】Cmake详解 CMakeLists.txt详细配置 | 哒哒瑟</title>
   
   <meta name="keywords" content="Android,Java,Linux">
   
@@ -185,7 +185,7 @@
   
     <h1 class="title">
       <a href="/android/ndk/ndk-13/">
-        post
+        【NDK系列13】Cmake详解 CMakeLists.txt详细配置
       </a>
     </h1>
   
@@ -216,7 +216,7 @@
             <div class="new-meta-item date">
   <a class="notlink">
     <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-    <p>2019-10-31</p>
+    <p>2019-10-07</p>
   </a>
 </div>
 
@@ -224,6 +224,14 @@
         
           
             
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/Android/NDK/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>Android&nbsp;/&nbsp;NDK</p>
+    </a>
+  </div>
+
 
           
         
@@ -260,7 +268,35 @@
 
     <section class="article typo">
       <div class="article-entry" itemprop="articleBody">
-        
+        <p>作为Android开发者，还是乖乖的使用Cmake进行NDK的开发好了</p>
+<a id="more"></a>
+<h2 id="一、CMake简介"><a href="#一、CMake简介" class="headerlink" title="一、CMake简介"></a>一、CMake简介</h2><p>CMake是一个比make更高级的编译配置工具，它可以根据不同平台、不同的编译器，生成相应的Makefile或者vcproj项目。从而达到跨平台的目的。</p>
+<p>Android Studio利用CMake生成的是ninja，ninja是一个小型的关注速度的构建系统。我们不需要关心ninja的脚本，知道怎么配置cmake就可以了。从而可以看出cmake其实是一个跨平台的支持产出各种不同的构建脚本的一个工具。</p>
+<p>在android studio 2.2及以上，构建原生库的默认工具是 CMake。</p>
+<h2 id="二、基本命令"><a href="#二、基本命令" class="headerlink" title="二、基本命令"></a>二、基本命令</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#cmake最低版本</span><br><span class="line">cmake_minimum_required(VERSION <span class="number">3.6</span><span class="number">.0</span>)</span><br><span class="line"></span><br><span class="line">#指定项目</span><br><span class="line">project(Main)</span><br><span class="line"></span><br><span class="line">add_executable(demo demo.cpp) # 生成可执行文件</span><br><span class="line">add_library(common STATIC util.cpp) # 生成静态库</span><br><span class="line">add_library(common SHARED util.cpp) # 生成动态库或共享库</span><br></pre></td></tr></table></figure>
+<p><strong>搜索c/cpp文件</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># 搜索当前目录下的所有.cpp文件， 但不能查找子目录</span><br><span class="line">aux_source_directory(. SRC_LIST) </span><br><span class="line">add_library(demo $&#123;SRC_LIST&#125;)</span><br><span class="line"></span><br><span class="line">#也可以 </span><br><span class="line">file(GLOB DIR_SRCS *.c)</span><br><span class="line">add_executable(main $&#123;DIR_SRCS&#125;)</span><br></pre></td></tr></table></figure>
+<p><strong>使用子目录中的CMakeList</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 添加 child 子目录下的cmakelist</span><br><span class="line">add_subdirectory(child)</span><br><span class="line"># 指定生成目标 </span><br><span class="line">add_library(main $&#123;DIR_SRCS&#125;)</span><br><span class="line"># 添加链接库</span><br><span class="line">target_link_libraries(main child)</span><br><span class="line"><span class="comment">//--------------------------------------</span></span><br><span class="line"># child中设置</span><br><span class="line">aux_source_directory(. DIR_LIB_SRCS)</span><br><span class="line"># 生成链接库 默认生成静态库</span><br><span class="line">add_library (child $&#123;DIR_LIB_SRCS&#125;)</span><br><span class="line">#指定编译为静态库</span><br><span class="line">add_library (child STATIC $&#123;DIR_LIB_SRCS&#125;)</span><br></pre></td></tr></table></figure>
+<p><strong>设置预编译宏</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#设置预编译宏 cflag和cxxflag</span><br><span class="line">set(CMAKE_C_FLAGS <span class="string">"$&#123;CMAKE_C_FLAGS&#125; -DTEST"</span>  )</span><br><span class="line">set(CMAKE_Cxx_FLAGS <span class="string">"$&#123;CMAKE_Cxx_FLAGS&#125; -DTEST"</span>  )</span><br></pre></td></tr></table></figure>
+<p><strong>引入头文件</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#这样就可以使用 #include &lt;xx&gt; 引入 </span><br><span class="line">#否则需要使用 #include "path/xx" </span><br><span class="line">include_directories( imported-lib/include/ )</span><br></pre></td></tr></table></figure>
+<p><strong>逻辑判断语句</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#逻辑判断 计较字符串</span><br><span class="line">set(ANDROID_ABI <span class="string">"areambi-v7a"</span>)</span><br><span class="line"><span class="keyword">if</span>($&#123;ANDROID_ABI&#125; STREQUAL <span class="string">"areambi"</span>)</span><br><span class="line">  	message(<span class="string">"armv5"</span>)</span><br><span class="line">elseif($&#123;ANDROID_ABI&#125; STREQUAL <span class="string">"areambi-v7a"</span>)</span><br><span class="line">	message(<span class="string">"armv7a"</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">	</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
+<h2 id="三、-build-gradle配置"><a href="#三、-build-gradle配置" class="headerlink" title="三、 build.gradle配置"></a>三、 build.gradle配置</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//还可以在gradle中使用 arguments  设置一些配置</span></span><br><span class="line">externalNativeBuild &#123;</span><br><span class="line">      cmake &#123;</span><br><span class="line">        <span class="built_in">arguments</span> <span class="string">"-DANDROID_TOOLCHAIN=clang"</span>,	<span class="comment">//使用的编译器clang/gcc</span></span><br><span class="line">                  <span class="string">"-DANDROID_STL=gnustl_static"</span> <span class="comment">//cmake默认就是 gnustl_static</span></span><br><span class="line">        cFlags <span class="string">""</span> <span class="comment">//这里也可以指定cflag和cxxflag,效果和之前的cmakelist里使用一样</span></span><br><span class="line">        cppFlags <span class="string">""</span> </span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="四、-注意事项"><a href="#四、-注意事项" class="headerlink" title="四、 注意事项"></a>四、 注意事项</h2><ol>
+<li><p>​    使用Android.mk在 &gt;=6.0 设备上不能再使用预编译动态库(静态库没问题)：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION <span class="number">3.4</span><span class="number">.1</span>)</span><br><span class="line"></span><br><span class="line">file(GLOB SOURCE *.c )</span><br><span class="line">add_library(</span><br><span class="line">             hello-jni</span><br><span class="line">             SHARED</span><br><span class="line">            $&#123;SOURCE&#125; )</span><br><span class="line">            </span><br><span class="line">#这段配置在6.0依然没问题 </span><br><span class="line">set(CMAKE_C_FLAGS <span class="string">"$&#123;CMAKE_C_FLAGS&#125; -L[SO所在目录]"</span>)</span><br><span class="line"></span><br><span class="line">#这段配置只能在6.0以下使用 </span><br><span class="line">#add_library(Test SHARED IMPORTED)</span><br><span class="line">#set_target_properties(Test PROPERTIES IMPORTED_LOCATION [SO绝对地址])</span><br><span class="line"></span><br><span class="line">target_link_libraries(  hello-jni Test )</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="2">
+<li><p>存在两个动态库<code>libhello-jni.so</code> 与 <code>libTest.so</code>。</p>
+<p>libhello-jni.so<code>依赖于</code>libTest.so<code>(使用NDK下的</code>ndk-depends`可查看依赖关系)，则：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//&lt;=5.0:</span></span><br><span class="line">	System.loadLibrary(<span class="string">"Test"</span>);</span><br><span class="line">	System.loadLibrary(<span class="string">"hello-jni"</span>);</span><br><span class="line"><span class="comment">//&gt;=6.0:</span></span><br><span class="line">	System.loadLibrary(<span class="string">"hello-jni"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+
       </div>
       
         <br>
@@ -271,7 +307,7 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-31T15:14:59+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-31T18:04:57+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
     <p>更新于 2019年10月31日</p>
@@ -282,6 +318,9 @@
       
         
           
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/blog/tags/NDK/" rel="nofollow"><i class="fas fa-tag" aria-hidden="true"></i><p>NDK</p></a></div>
+
 
         
       
@@ -291,7 +330,7 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://ddssingsong.github.io/android/ndk/ndk-13/&title=post | 哒哒瑟&summary=">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://ddssingsong.github.io/android/ndk/ndk-13/&title=【NDK系列13】Cmake详解 CMakeLists.txt详细配置 | 哒哒瑟&summary=作为Android开发者，还是乖乖的使用Cmake进行NDK的开发好了">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
           
@@ -299,7 +338,7 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://ddssingsong.github.io/android/ndk/ndk-13/&title=post | 哒哒瑟&summary=">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://ddssingsong.github.io/android/ndk/ndk-13/&title=【NDK系列13】Cmake详解 CMakeLists.txt详细配置 | 哒哒瑟&summary=作为Android开发者，还是乖乖的使用Cmake进行NDK的开发好了">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
           
@@ -315,7 +354,7 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://ddssingsong.github.io/android/ndk/ndk-13/&title=post | 哒哒瑟&summary=">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://ddssingsong.github.io/android/ndk/ndk-13/&title=【NDK系列13】Cmake详解 CMakeLists.txt详细配置 | 哒哒瑟&summary=作为Android开发者，还是乖乖的使用Cmake进行NDK的开发好了">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
           
@@ -337,31 +376,22 @@
       
           <div class="prev-next">
               
-                  <section class="prev">
-                      <span class="art-item-left">
-                          <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
-                          <h4>
-                              <a href="/android/ndk/ndk-14/" rel="prev" title="post">
-                                
-                                    post
-                                
-                              </a>
-                          </h4>
-                          
-                      </span>
-                  </section>
-              
               
                   <section class="next">
                       <span class="art-item-right" aria-hidden="true">
                           <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
                           <h4>
-                              <a href="/android/ndk/ndk-11/" rel="prev" title="post">
+                              <a href="/android/ndk/ndk-12/" rel="prev" title="【NDK系列12】Makefile Android.mk Application.mk 详解">
                                   
-                                      post
+                                      【NDK系列12】Makefile Android.mk Application.mk 详解
                                   
                               </a>
                           </h4>
+                          
+                              
+                              <h6 class="tags">
+                                  <a class="tag" href="/blog/tags/NDK/"><i class="fas fa-tag fa-fw" aria-hidden="true"></i> NDK</a>
+                              </h6>
                           
                       </span>
                   </section>
@@ -404,7 +434,7 @@
 
   <script>
     window.subData = {
-      title: 'post',
+      title: '【NDK系列13】Cmake详解 CMakeLists.txt详细配置',
       tools: true
     }
   </script>
@@ -415,165 +445,6 @@
   
     
     
-      
-      
-        
-          
-          
-            
-              <section class="widget author">
-  <div class="content pure">
-    
-      <div class="avatar">
-        <img class="avatar" src="https://avatars0.githubusercontent.com/u/13553838?s=460&v=4">
-      </div>
-    
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="mailto:ddssingsong@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="https://github.com/ddssingsong" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="https://music.163.com/#/song?id=523696075" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
-
-            
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-      
-        
-          
-          
-        
-          
-          
-            
-              
-
-            
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-      
-        
-          
-          
-        
-          
-          
-        
-          
-          
-            
-              <section class="widget grid">
-  
-<header class="pure">
-  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
-  
-</header>
-
-  <div class="content pure">
-    <ul class="grid navgation">
-      
-        <li><a class="flat-box" title="/" href="/" id="home">
-          
-            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
-          
-          近期文章
-        </a></li>
-      
-        <li><a class="flat-box" title="/blog/archives/" href="/blog/archives/" rel="nofollow" id="blogarchives">
-          
-            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
-          
-          文章归档
-        </a></li>
-      
-        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
-          
-            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
-          
-          开源项目
-        </a></li>
-      
-        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
-          
-            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
-          
-          关于小站
-        </a></li>
-      
-    </ul>
-  </div>
-</section>
-
-            
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
       
         
           
@@ -602,9 +473,9 @@
     <div class="content pure">
       <ul class="entry">
         
-          <li><a class="flat-box" title="/blog/categories/Android/" href="/blog/categories/Android/"><div class="name">Android</div><div class="badge">(8)</div></a></li>
+          <li><a class="flat-box" title="/blog/categories/Android/" href="/blog/categories/Android/"><div class="name">Android</div><div class="badge">(13)</div></a></li>
         
-          <li><a class="flat-box child" title="/blog/categories/Android/NDK/" href="/blog/categories/Android/NDK/"><div class="name">NDK</div><div class="badge">(8)</div></a></li>
+          <li><a class="flat-box child" title="/blog/categories/Android/NDK/" href="/blog/categories/Android/NDK/"><div class="name">NDK</div><div class="badge">(13)</div></a></li>
         
           <li><a class="flat-box" title="/blog/categories/Hexo/" href="/blog/categories/Hexo/"><div class="name">Hexo</div><div class="badge">(11)</div></a></li>
         
@@ -638,118 +509,24 @@
         
           
           
-        
-          
-          
-        
-          
-          
-        
-          
-          
             
               
-  <section class="widget tagcloud">
+  <section class="widget toc-wrapper">
     
 <header class="pure">
-  <div><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;本文目录</div>
   
-    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
-    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+    <!-- <div class='wrapper'><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div> -->
   
 </header>
 
     <div class="content pure">
-      <a href="/blog/tags/Hexo/" style="font-size: 17.33px; color: #828282">Hexo</a> <a href="/blog/tags/NDK/" style="font-size: 20.67px; color: #6c6c6c">NDK</a> <a href="/blog/tags/shell/" style="font-size: 14px; color: #999">shell</a> <a href="/blog/tags/ss/" style="font-size: 14px; color: #999">ss</a> <a href="/blog/tags/test/" style="font-size: 24px; color: #555">test</a> <a href="/blog/tags/tips/" style="font-size: 14px; color: #999">tips</a>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、CMake简介"><span class="toc-text">一、CMake简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、基本命令"><span class="toc-text">二、基本命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、-build-gradle配置"><span class="toc-text">三、 build.gradle配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、-注意事项"><span class="toc-text">四、 注意事项</span></a></li></ol>
     </div>
   </section>
 
 
             
-          
-        
-          
-          
-        
-          
-          
-        
-      
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-            
-              <section class="widget list">
-  
-<header class="pure">
-  <div><i class="fas fa-thumbs-up fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;强烈推荐</div>
-  
-</header>
-
-  <div class="content pure">
-    <ul class="entry">
-      
-        <li><a class="flat-box" title="https://yasuotu.com" href="https://yasuotu.com">
-          <div class="name">
-            
-              <i class=" fa-fw" aria-hidden="true"></i>
-            
-            &nbsp;&nbsp;图片在线压缩
-          </div>
-          
-        </a></li>
-      
-        <li><a class="flat-box" title="https://realfavicongenerator.net" href="https://realfavicongenerator.net">
-          <div class="name">
-            
-              <i class=" fa-fw" aria-hidden="true"></i>
-            
-            &nbsp;&nbsp;生成Favicon
-          </div>
-          
-        </a></li>
-      
-        <li><a class="flat-box" title="https://ddssingsong.github.io/resume/" href="https://ddssingsong.github.io/resume/">
-          <div class="name">
-            
-              <i class=" fa-fw" aria-hidden="true"></i>
-            
-            &nbsp;&nbsp;简历主题
-          </div>
-          
-        </a></li>
-      
-    </ul>
-  </div>
-</section>
-
-            
-          
-        
-      
-        
-          
-          
-        
-          
           
         
           

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
-  <title>post | 哒哒瑟</title>
+  <title>【NDK系列8】c++ 线程基本使用 线程同步 | 哒哒瑟</title>
   
   <meta name="keywords" content="Android,Java,Linux">
   
@@ -185,7 +185,7 @@
   
     <h1 class="title">
       <a href="/android/ndk/ndk-8/">
-        post
+        【NDK系列8】c++ 线程基本使用 线程同步
       </a>
     </h1>
   
@@ -216,7 +216,7 @@
             <div class="new-meta-item date">
   <a class="notlink">
     <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-    <p>2019-10-31</p>
+    <p>2019-10-03</p>
   </a>
 </div>
 
@@ -224,6 +224,14 @@
         
           
             
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/Android/NDK/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>Android&nbsp;/&nbsp;NDK</p>
+    </a>
+  </div>
+
 
           
         
@@ -260,7 +268,32 @@
 
     <section class="article typo">
       <div class="article-entry" itemprop="articleBody">
-        
+        <p>线程，有时被称为轻量进程，是程序执行的最小单元。 </p>
+<a id="more"></a>
+<h2 id="一、C-11线程"><a href="#一、C-11线程" class="headerlink" title="一、C++11线程"></a>一、C++11线程</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;thread&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">task</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"task:"</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">thread <span class="title">t1</span><span class="params">(task,<span class="number">100</span>)</span></span>;</span><br><span class="line"><span class="comment">//等待线程结束再继续执行</span></span><br><span class="line">t1.join();</span><br></pre></td></tr></table></figure>
+<h2 id="二、POSIX线程"><a href="#二、POSIX线程" class="headerlink" title="二、POSIX线程"></a>二、POSIX线程</h2><p>POSIX 可移植操作系统接口，标准定义了操作系统应该为应用程序提供的接口标准 </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">pthreadTask</span><span class="params">(<span class="keyword">void</span>* args)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span>* i = <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>*&gt;(args);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">"posix线程:"</span> &lt;&lt; *i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">pthread_t</span> pid;</span><br><span class="line"><span class="keyword">int</span> pi = <span class="number">100</span>;</span><br><span class="line">pthread_create(&amp;pid, <span class="number">0</span>, pthreadTask, &amp;pi);</span><br><span class="line"><span class="comment">//等待线程的结束</span></span><br><span class="line">pthread_join(pid,<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<h3 id="1-线程属性"><a href="#1-线程属性" class="headerlink" title="1. 线程属性"></a>1. 线程属性</h3><p>线程具有属性，用 <code>pthread_attr_t</code> 表示 </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">pthread_attr_t</span> attr;</span><br><span class="line"><span class="comment">//初始化 attr中为操作系统实现支持的线程所有属性的默认值</span></span><br><span class="line">pthread_attr_init(&amp;attr);</span><br><span class="line">pthread_attr_destroy(&amp;attr);</span><br></pre></td></tr></table></figure>
+<h4 id="分离线程"><a href="#分离线程" class="headerlink" title="分离线程"></a>分离线程</h4><p>线程创建默认是非分离的，当<code>pthread_join()</code>函数返回时，创建的线程终止，释放自己占用的系统资源</p>
+<p>分离线程不能被其他线程等待,<code>pthread_join()</code>无效，线程自己玩自己的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置是否为分离线程</span></span><br><span class="line"><span class="comment">//PTHREAD_CREATE_DETACHED 分离</span></span><br><span class="line"><span class="comment">//PTHREAD_CREATE_JOINABLE 非分离</span></span><br><span class="line">pthread_attr_setdetachstate(&amp;attr,PTHREAD_CREATE_DETACHED);</span><br></pre></td></tr></table></figure>
+<h4 id="调度策略与优先级"><a href="#调度策略与优先级" class="headerlink" title="调度策略与优先级"></a>调度策略与优先级</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置调度策略 </span></span><br><span class="line"><span class="comment">//返回0 设置成功</span></span><br><span class="line">pthread_attr_setschedpolicy(&amp;attr, SCHED_FIFO);</span><br><span class="line"><span class="comment">// SCHED_FIFO </span></span><br><span class="line"><span class="comment">//	实时调度策略，先到先服务 一旦占用cpu则一直运行。一直运行直到有更高优先级任务到达或自己放弃。</span></span><br><span class="line"><span class="comment">// SCHED_RR</span></span><br><span class="line"><span class="comment">//	实时调度策略，时间轮转 系统分配一个时间段，在时间段内执行本线程</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//设置优先级</span></span><br><span class="line"><span class="comment">//获得对应策略的最小、最大优先级</span></span><br><span class="line"><span class="keyword">int</span> max = sched_get_priority_max(SCHED_FIFO);</span><br><span class="line"><span class="keyword">int</span> min = sched_get_priority_min(SCHED_FIFO);</span><br><span class="line">sched_param param;</span><br><span class="line">param.sched_priority = max;</span><br><span class="line">pthread_attr_setschedparam(&amp;attr, &amp;param);</span><br></pre></td></tr></table></figure>
+<h3 id="1-线程同步"><a href="#1-线程同步" class="headerlink" title="1. 线程同步"></a>1. 线程同步</h3><p>多线程同时读写同一份共享资源的时候，可能会引起冲突。需要引入线程“同步”机制，即各位线程之间有序地对共享资源进行操作。</p>
+<p>以下是会出现问题的写法</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">pop</span><span class="params">(<span class="keyword">void</span>* args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 线程未同步导致的多线程安全问题</span></span><br><span class="line">    <span class="comment">// 会有重复的数据取出并出现异常</span></span><br><span class="line">	<span class="keyword">if</span> (!q.empty())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"取出数据:%d\n"</span>, q.front());</span><br><span class="line">		q.pop();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"无数据\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		q.push(i);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">pthread_t</span> pid[<span class="number">10</span>];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		pthread_create(&amp;pid[i], <span class="number">0</span>, pop, &amp;q);</span><br><span class="line">	&#125;</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>加入互斥锁</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line"><span class="keyword">pthread_mutex_t</span> mutex;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">pop</span><span class="params">(<span class="keyword">void</span>* args)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 锁</span></span><br><span class="line">	pthread_mutex_lock(&amp;mutex);</span><br><span class="line">	<span class="keyword">if</span> (!q.empty())</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"取出数据:%d\n"</span>, q.front());</span><br><span class="line">		q.pop();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"无数据\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">// 放</span></span><br><span class="line">	pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//初始化互斥锁</span></span><br><span class="line">	pthread_mutex_init(&amp;mutex, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		q.push(i);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">pthread_t</span> pid[<span class="number">10</span>];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		pthread_create(&amp;pid[i], <span class="number">0</span>, pop, &amp;q);</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">//需要释放</span></span><br><span class="line"> 	<span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		pthread_join(pid[i], <span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	pthread_mutex_destroy(&amp;mutex);</span><br><span class="line">	system(<span class="string">"pause"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-条件变量"><a href="#2-条件变量" class="headerlink" title="2. 条件变量"></a>2. 条件变量</h3><p>条件变量是线程间进行同步的一种机制，主要包括两个动作：一个线程等待”条件变量的条件成立”而挂起；另一个线程使”条件成立”,从而唤醒挂起线程</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">SafeQueue</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	SafeQueue() &#123;</span><br><span class="line">		pthread_mutex_init(&amp;mutex,<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	~SafeQueue() &#123;</span><br><span class="line">		pthread_mutex_destory(&amp;mutex);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">		pthread_mutex_lock(&amp;mutex);</span><br><span class="line">		q.push(t);</span><br><span class="line">		pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">dequeue</span><span class="params">(T&amp; t)</span> </span>&#123;</span><br><span class="line">		pthread_mutex_lock(&amp;mutex);</span><br><span class="line">		<span class="keyword">if</span> (!q.empty())</span><br><span class="line">		&#123;</span><br><span class="line">			t = q.front();</span><br><span class="line">			q.pop();</span><br><span class="line">			pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">			<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="built_in">queue</span>&lt;T&gt; q;</span><br><span class="line">	<span class="keyword">pthread_mutex_t</span> mutex;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上面的模板类存放数据T，并使用互斥锁保证对queue的操作是线程安全的。这就是一个生产/消费模式。</p>
+<p>如果在取出数据的时候，queue为空，则一直等待，直到下一次enqueue加入数据。</p>
+<p>这就是一个典型的生产/消费模式, 加入条件变量使 “dequeue”  挂起,直到由其他地方唤醒</p>
+<p><strong>下面是使用条件变量实现</strong></p>
+<p>通过使用cond条件来 唤醒等待中的线程</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> once</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">SafeQueue</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	SafeQueue() &#123;</span><br><span class="line">		pthread_mutex_init(&amp;mutex,<span class="number">0</span>);</span><br><span class="line">		pthread_cond_init(&amp;cond, <span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	~SafeQueue() &#123;</span><br><span class="line">		pthread_mutex_destory(&amp;mutex);</span><br><span class="line">		pthread_cond_destory(&amp;cond);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">enqueue</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">		pthread_mutex_lock(&amp;mutex);</span><br><span class="line">		q.push(t);</span><br><span class="line">		<span class="comment">//发出信号 通知挂起线程</span></span><br><span class="line">		<span class="comment">//由系统唤醒一个线程</span></span><br><span class="line">		<span class="comment">//pthread_cond_signal(&amp;cond);</span></span><br><span class="line">		<span class="comment">// 广播 对应多个消费者的时候 多个线程等待唤醒所有</span></span><br><span class="line">		pthread_cond_broadcast(&amp;cond);</span><br><span class="line">		pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">int</span> <span class="title">dequeue</span><span class="params">(T&amp; t)</span> </span>&#123;</span><br><span class="line">		pthread_mutex_lock(&amp;mutex);</span><br><span class="line">		<span class="comment">//可能被意外唤醒 所以while循环</span></span><br><span class="line">		<span class="keyword">while</span> (q.empty())</span><br><span class="line">		&#123;</span><br><span class="line">			pthread_cond_wait(&amp;cond, &amp;mutex);</span><br><span class="line">		&#125;</span><br><span class="line">		t = q.front();</span><br><span class="line">		q.pop();</span><br><span class="line">		pthread_mutex_unlock(&amp;mutex);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:	</span><br><span class="line">	<span class="built_in">queue</span>&lt;T&gt; q;</span><br><span class="line">	<span class="keyword">pthread_mutex_t</span> mutex;</span><br><span class="line">	<span class="keyword">pthread_cond_t</span> cond;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><a href="https://github.com/ddssingsong/AnyNdk" target="_blank" rel="noopener">https://github.com/ddssingsong/AnyNdk</a></p>
+
       </div>
       
         <br>
@@ -271,7 +304,7 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-31T15:13:35+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-31T17:37:57+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
     <p>更新于 2019年10月31日</p>
@@ -282,6 +315,9 @@
       
         
           
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/blog/tags/NDK/" rel="nofollow"><i class="fas fa-tag" aria-hidden="true"></i><p>NDK</p></a></div>
+
 
         
       
@@ -291,7 +327,7 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://ddssingsong.github.io/android/ndk/ndk-8/&title=post | 哒哒瑟&summary=">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://ddssingsong.github.io/android/ndk/ndk-8/&title=【NDK系列8】c++ 线程基本使用 线程同步 | 哒哒瑟&summary=线程，有时被称为轻量进程，是程序执行的最小单元。 ">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
           
@@ -299,7 +335,7 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://ddssingsong.github.io/android/ndk/ndk-8/&title=post | 哒哒瑟&summary=">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://ddssingsong.github.io/android/ndk/ndk-8/&title=【NDK系列8】c++ 线程基本使用 线程同步 | 哒哒瑟&summary=线程，有时被称为轻量进程，是程序执行的最小单元。 ">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
           
@@ -315,7 +351,7 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://ddssingsong.github.io/android/ndk/ndk-8/&title=post | 哒哒瑟&summary=">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://ddssingsong.github.io/android/ndk/ndk-8/&title=【NDK系列8】c++ 线程基本使用 线程同步 | 哒哒瑟&summary=线程，有时被称为轻量进程，是程序执行的最小单元。 ">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
           
@@ -341,12 +377,17 @@
                       <span class="art-item-left">
                           <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
                           <h4>
-                              <a href="/android/ndk/ndk-9/" rel="prev" title="post">
+                              <a href="/android/ndk/ndk-9/" rel="prev" title="【NDK系列9】c++ 智能指针">
                                 
-                                    post
+                                    【NDK系列9】c++ 智能指针
                                 
                               </a>
                           </h4>
+                          
+                              
+                              <h6 class="tags">
+                                  <a class="tag" href="/blog/tags/NDK/"><i class="fas fa-tag fa-fw" aria-hidden="true"></i> NDK</a>
+                              </h6>
                           
                       </span>
                   </section>
@@ -356,9 +397,9 @@
                       <span class="art-item-right" aria-hidden="true">
                           <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
                           <h4>
-                              <a href="/android/ndk/ndk-12/" rel="prev" title="【NDK系列12】编译器 clang gcc g++">
+                              <a href="/android/ndk/ndk-7/" rel="prev" title="【NDK系列7】c/c++ 文件与流操作">
                                   
-                                      【NDK系列12】编译器 clang gcc g++
+                                      【NDK系列7】c/c++ 文件与流操作
                                   
                               </a>
                           </h4>
@@ -409,7 +450,7 @@
 
   <script>
     window.subData = {
-      title: 'post',
+      title: '【NDK系列8】c++ 线程基本使用 线程同步',
       tools: true
     }
   </script>
@@ -420,165 +461,6 @@
   
     
     
-      
-      
-        
-          
-          
-            
-              <section class="widget author">
-  <div class="content pure">
-    
-      <div class="avatar">
-        <img class="avatar" src="https://avatars0.githubusercontent.com/u/13553838?s=460&v=4">
-      </div>
-    
-    
-    
-      <div class="social-wrapper">
-        
-          
-            <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="mailto:ddssingsong@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="https://github.com/ddssingsong" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-          
-            <a href="https://music.163.com/#/song?id=523696075" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
-            </a>
-          
-        
-      </div>
-    
-  </div>
-</section>
-
-            
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-      
-        
-          
-          
-        
-          
-          
-            
-              
-
-            
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-      
-        
-          
-          
-        
-          
-          
-        
-          
-          
-            
-              <section class="widget grid">
-  
-<header class="pure">
-  <div><i class="fas fa-map-signs fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;站内导航</div>
-  
-</header>
-
-  <div class="content pure">
-    <ul class="grid navgation">
-      
-        <li><a class="flat-box" title="/" href="/" id="home">
-          
-            <i class="fas fa-clock fa-fw" aria-hidden="true"></i>
-          
-          近期文章
-        </a></li>
-      
-        <li><a class="flat-box" title="/blog/archives/" href="/blog/archives/" rel="nofollow" id="blogarchives">
-          
-            <i class="fas fa-archive fa-fw" aria-hidden="true"></i>
-          
-          文章归档
-        </a></li>
-      
-        <li><a class="flat-box" title="/projects/" href="/projects/" id="projects">
-          
-            <i class="fas fa-code-branch fa-fw" aria-hidden="true"></i>
-          
-          开源项目
-        </a></li>
-      
-        <li><a class="flat-box" title="/about/" href="/about/" rel="nofollow" id="about">
-          
-            <i class="fas fa-info-circle fa-fw" aria-hidden="true"></i>
-          
-          关于小站
-        </a></li>
-      
-    </ul>
-  </div>
-</section>
-
-            
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
       
         
           
@@ -607,9 +489,9 @@
     <div class="content pure">
       <ul class="entry">
         
-          <li><a class="flat-box" title="/blog/categories/Android/" href="/blog/categories/Android/"><div class="name">Android</div><div class="badge">(8)</div></a></li>
+          <li><a class="flat-box" title="/blog/categories/Android/" href="/blog/categories/Android/"><div class="name">Android</div><div class="badge">(13)</div></a></li>
         
-          <li><a class="flat-box child" title="/blog/categories/Android/NDK/" href="/blog/categories/Android/NDK/"><div class="name">NDK</div><div class="badge">(8)</div></a></li>
+          <li><a class="flat-box child" title="/blog/categories/Android/NDK/" href="/blog/categories/Android/NDK/"><div class="name">NDK</div><div class="badge">(13)</div></a></li>
         
           <li><a class="flat-box" title="/blog/categories/Hexo/" href="/blog/categories/Hexo/"><div class="name">Hexo</div><div class="badge">(11)</div></a></li>
         
@@ -643,118 +525,24 @@
         
           
           
-        
-          
-          
-        
-          
-          
-        
-          
-          
             
               
-  <section class="widget tagcloud">
+  <section class="widget toc-wrapper">
     
 <header class="pure">
-  <div><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;热门标签</div>
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;本文目录</div>
   
-    <a class="rightBtn" rel="nofollow" href="/blog/tags/" title="blog/tags/">
-    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+    <!-- <div class='wrapper'><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div> -->
   
 </header>
 
     <div class="content pure">
-      <a href="/blog/tags/Hexo/" style="font-size: 17.33px; color: #828282">Hexo</a> <a href="/blog/tags/NDK/" style="font-size: 20.67px; color: #6c6c6c">NDK</a> <a href="/blog/tags/shell/" style="font-size: 14px; color: #999">shell</a> <a href="/blog/tags/ss/" style="font-size: 14px; color: #999">ss</a> <a href="/blog/tags/test/" style="font-size: 24px; color: #555">test</a> <a href="/blog/tags/tips/" style="font-size: 14px; color: #999">tips</a>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、C-11线程"><span class="toc-text">一、C++11线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、POSIX线程"><span class="toc-text">二、POSIX线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-线程属性"><span class="toc-text">1. 线程属性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#分离线程"><span class="toc-text">分离线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#调度策略与优先级"><span class="toc-text">调度策略与优先级</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-线程同步"><span class="toc-text">1. 线程同步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-条件变量"><span class="toc-text">2. 条件变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码"><span class="toc-text">代码</span></a></li></ol>
     </div>
   </section>
 
 
             
-          
-        
-          
-          
-        
-          
-          
-        
-      
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-        
-          
-          
-            
-              <section class="widget list">
-  
-<header class="pure">
-  <div><i class="fas fa-thumbs-up fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;强烈推荐</div>
-  
-</header>
-
-  <div class="content pure">
-    <ul class="entry">
-      
-        <li><a class="flat-box" title="https://yasuotu.com" href="https://yasuotu.com">
-          <div class="name">
-            
-              <i class=" fa-fw" aria-hidden="true"></i>
-            
-            &nbsp;&nbsp;图片在线压缩
-          </div>
-          
-        </a></li>
-      
-        <li><a class="flat-box" title="https://realfavicongenerator.net" href="https://realfavicongenerator.net">
-          <div class="name">
-            
-              <i class=" fa-fw" aria-hidden="true"></i>
-            
-            &nbsp;&nbsp;生成Favicon
-          </div>
-          
-        </a></li>
-      
-        <li><a class="flat-box" title="https://ddssingsong.github.io/resume/" href="https://ddssingsong.github.io/resume/">
-          <div class="name">
-            
-              <i class=" fa-fw" aria-hidden="true"></i>
-            
-            &nbsp;&nbsp;简历主题
-          </div>
-          
-        </a></li>
-      
-    </ul>
-  </div>
-</section>
-
-            
-          
-        
-      
-        
-          
-          
-        
-          
           
         
           

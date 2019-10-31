@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
-  <title>【NDK系列12】编译器 clang gcc g++ | 哒哒瑟</title>
+  <title>【NDK系列12】Makefile Android.mk Application.mk 详解 | 哒哒瑟</title>
   
   <meta name="keywords" content="Android,Java,Linux">
   
@@ -185,7 +185,7 @@
   
     <h1 class="title">
       <a href="/android/ndk/ndk-12/">
-        【NDK系列12】编译器 clang gcc g++
+        【NDK系列12】Makefile Android.mk Application.mk 详解
       </a>
     </h1>
   
@@ -216,7 +216,7 @@
             <div class="new-meta-item date">
   <a class="notlink">
     <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-    <p>2019-10-28</p>
+    <p>2019-10-06</p>
   </a>
 </div>
 
@@ -268,47 +268,319 @@
 
     <section class="article typo">
       <div class="article-entry" itemprop="articleBody">
-        <p>了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。</p>
+        <p>我们在使用第三方库时，很多都提供makefile，我们需要读懂他们并且适当的修改他们，另外虽说现在google推荐使用cmake，但是如果遇见Android.mk还是需要能够读懂。</p>
 <a id="more"></a>
-<h2 id="1-gcc-g-clang"><a href="#1-gcc-g-clang" class="headerlink" title="1. gcc/g++/clang"></a>1. gcc/g++/clang</h2><p>了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。</p>
-<h3 id="clang"><a href="#clang" class="headerlink" title="clang"></a>clang</h3><p>clang 是一个<code>C、C++、Object-C</code>的轻量级编译器。基于<code>LLVM</code> （LLVM是以C++编写而成的构架编译器的框架系统，可以说是一个用于开发编译器相关的库）</p>
-<h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><p><code>GNU C</code>编译器。原本只能处理<code>C语言</code>，很快扩展，变得可处理<code>C++</code>。(GNU计划，又称革奴计划。目标是创建一套完全自由的操作系统)</p>
-<h3 id="g"><a href="#g" class="headerlink" title="g++"></a>g++</h3><p><code>GNU c++</code>编译器</p>
-<p>gcc、g++、clang都是编译器。</p>
-<ul>
-<li>gcc和g++都能够编译c/c++，但是编译时候行为不同。</li>
-<li>clang也是一个编译器，对比gcc，它具有编译速度更快、编译产出更小等优点，但是某些软件在使用clang编译时候因为源码中内容的问题会出现错误。</li>
-<li>clang++与clang就相当于gcc与g++。</li>
-</ul>
-<p>对于gcc与g++：</p>
-<ol>
-<li>后缀为<code>.c</code>的源文件，gcc把它当作是C程序，而g++当作是C++程序；后缀为<code>.cpp</code>的，两者都会认为是c++程序</li>
-<li>g++会自动链接c++标准库stl，gcc不会</li>
-<li>gcc不会定义__cplusplus宏，而g++会</li>
-</ol>
-<p><strong>linux</strong>安装gcc</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install build-essential #安装gcc、g++与make</span><br></pre></td></tr></table></figure>
-<h2 id="2-编译器过程"><a href="#2-编译器过程" class="headerlink" title="2. 编译器过程"></a>2. 编译器过程</h2><p>一个C/C++文件要经过预处理(preprocessing)、编译(compilation)、汇编(assembly)、和连接(linking)才能变成可执行文件。</p>
-<h3 id="1、预处理"><a href="#1、预处理" class="headerlink" title="1、预处理"></a>1、预处理</h3><p>​     gcc -E main.c  -o main.i </p>
-<p>​     <code>-E</code>的作用是让gcc在预处理结束后停止编译。</p>
-<p>​    预处理阶段主要处理include和define等。它把#include包含进来的.h 文件插入到#include所在的位置，把源程序中使用到的用#define定义的宏用实际的字符串代替</p>
-<h3 id="2、编译阶段"><a href="#2、编译阶段" class="headerlink" title="2、编译阶段"></a>2、<strong>编译阶段</strong></h3><p>​    gcc -S main.i -o main.s</p>
-<p>​     <code>-S</code>的作用是编译后结束，编译生成了汇编文件。</p>
-<p>​    在这个阶段中，gcc首先要检查代码的规范性、是否有语法错误等，以确定代码的实际要做的工作，在检查无误后，gcc把代码翻译成汇编语言。</p>
-<h3 id="3、汇编阶段"><a href="#3、汇编阶段" class="headerlink" title="3、汇编阶段"></a>3、<strong>汇编阶段</strong></h3><p>​    gcc -c main.s -o main.o</p>
-<p>​    汇编阶段把 .s文件翻译成二进制机器指令文件.o,这个阶段接收.c, .i, .s的文件都没有问题。</p>
-<h3 id="4、链接阶段"><a href="#4、链接阶段" class="headerlink" title="4、链接阶段"></a>4、<strong>链接阶段</strong></h3><p>​    gcc -o main main.s</p>
-<p>​    链接阶段，链接的是<strong>函数库</strong>。在main.c中并没有定义”printf”的函数实现，且在预编译中包含进的”stdio.h”中也只有该函数的声明。系统把这些函数实现都被做到名为<code>libc.so</code>的动态库。</p>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><strong>函数库一般分为静态库和动态库两种</strong></p>
-<ul>
-<li>静态库是指编译链接时，把库文件的代码全部加入到可执行文件中，因此生成的文件比较大，但在运行时也就不再需要库文件了。Linux中后缀名为”.a”。</li>
-<li>动态库与之相反，在编译链接时并没有把库文件的代码加入到可执行文件中，而是在程序执行时由运行时链接文件加载库。Linux中后缀名为”.so”，如前面所述的libc.so就是动态库。gcc在编译时默认使用动态库。</li>
-</ul>
-<blockquote>
-<p>静态库节省时间:不需要再进行动态链接，需要调用的代码直接就在代码内部</p>
-<p>动态库节省空间:如果一个动态库被两个程序调用,那么这个动态库只需要在内存中</p>
-<p>Java中在不经过封装的情况下只能直接使用动态库。</p>
+<h2 id="一、什么是Makefile"><a href="#一、什么是Makefile" class="headerlink" title="一、什么是Makefile"></a>一、什么是Makefile</h2><p>无论是c、c++首先要把源文件编译成中间代码文件，在Windows下也就是 .obj 文件，UNIX下是 .o 文件，即 Object File，这个动作叫做<code>编译（compile）</code>，然后再把大量的Object File合成执行文件或者静动态库，这个动作叫作<code>链接（link）</code>。</p>
+<p>一个工程中的源文件不计数，其按类型、功能、模块分别放在若干个目录中，makefile定义了一系列的规则来指定，哪些文件需要先编译，哪些文件需要后编译，如何进行链接等等操作。</p>
+<p>makefile 就是“自动化编译”，告诉make命令如何编译和链接,即make工具的配置脚本。</p>
+<p>默认的情况下，gun make命令会在当前目录下按顺序找寻文件</p>
+<p>“GNUmakefile”</p>
+<p>“makefile”</p>
+<p>“Makefile”</p>
+<p>最好不要用“GNUmakefile”，这个文件是GNU的make识别的（Windows Nmake就不识别）</p>
+<p> 当然，也可以使用别的文件名来书写Makefile，比如：“Make.Linux”，“Make.android”。这样在使用时候就需要 <code>make -f XX 或者 make --file XX。</code></p>
+<h2 id="二、Makefile规则"><a href="#二、Makefile规则" class="headerlink" title="二、Makefile规则"></a>二、Makefile规则</h2><h3 id="1-基本用法"><a href="#1-基本用法" class="headerlink" title="1. 基本用法"></a>1. 基本用法</h3><p>在Makefile中的命令，必须要以[Tab]键开始。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">在Makefile中的命令，必须要以[Tab]键开始。</span><br><span class="line"></span><br><span class="line">target : prerequisites ...(预备知识，先决条件)</span><br><span class="line">	command（指令）</span><br><span class="line">-----------------------------------------------------------------------------------------</span><br><span class="line">      target也就是一个目标文件，可以是Object File，也可以是执行文件。还可以是一个标签。</span><br><span class="line">      prerequisites 要生成那个target所需要的文件或是其他target。</span><br><span class="line">      command也就是make需要执行的命令。（任意的Shell命令）</span><br></pre></td></tr></table></figure>
+<p>如下例子</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># g++ -o  指定生成可执行文件的名称</span></span><br><span class="line"><span class="comment"># 下面的方法就是将main.o和test.o编译成test可执行程序test</span></span><br><span class="line"><span class="section">test:main.o test1.o</span></span><br><span class="line">	g++ -o test main.o test1.o</span><br></pre></td></tr></table></figure>
+<p>当然也可以直接编译cpp</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># \ 是换行连接符 便于Makefile的易读,不用都挤在一行</span></span><br><span class="line"><span class="section">test2:</span></span><br><span class="line">	g++ -o test2 main.cpp \</span><br><span class="line">test1.cpp</span><br></pre></td></tr></table></figure>
+<p>clean </p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm test main.o test.o</span><br></pre></td></tr></table></figure>
+<p>打印数据</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">print:</span></span><br><span class="line">	echo <span class="string">"hello world"</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-变量"><a href="#2-变量" class="headerlink" title="2. 变量"></a>2. 变量</h3><p>如果比较复杂的情况，比如文件很多，target目标比较多，那么我们如果来修改，比如增加一个.cpp文件，</p>
+<p>那可能需要在很多地方都写一下，也容易出错。为了易于维护，可以在makefile中使用变量。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#声明变量</span></span><br><span class="line">objects=main.o T1.o</span><br><span class="line"><span class="comment">#mac上自动编译 main.o</span></span><br><span class="line"><span class="section">test:$&#123;objects&#125;</span></span><br><span class="line">	g++ -o test $&#123;objects&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm test $&#123;objects&#125;</span><br><span class="line">	</span><br><span class="line"><span class="comment">#======================================</span></span><br><span class="line"><span class="comment"># *.c 表示所有后缀为c的文件。</span></span><br><span class="line"><span class="comment"># 让通配符在变量中(当前目录下所有 .c 文件)</span></span><br><span class="line">objects = <span class="variable">$(<span class="built_in">wildcard</span> *.c)</span></span><br><span class="line">test : $&#123;objects&#125;</span><br><span class="line">        gcc -o test $&#123;objects&#125;</span><br><span class="line">clean :</span><br><span class="line">        rm test $&#123;obects&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-include"><a href="#3-include" class="headerlink" title="3. include"></a>3. include</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> make.clean</span><br><span class="line"></span><br><span class="line"><span class="comment">#或者</span></span><br><span class="line"></span><br><span class="line">mk=make.clean</span><br><span class="line"><span class="keyword">include</span> $&#123;mk&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-文件搜索"><a href="#4-文件搜索" class="headerlink" title="4. 文件搜索"></a>4. 文件搜索</h3><p>在一些大的工程中，有大量的源文件存放在不同的目录中,最好的方法是把一个路径告诉make，让make在自动去找。<br>Makefile文件中的特殊变量<code>VPATH</code>就是完成这个功能的</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#默认先查找当前目录再查找当前目录下的a、b、c目录</span></span><br><span class="line">VPATH = a:b:c</span><br><span class="line">OBJ=a.o b.o c.o main.o</span><br><span class="line"></span><br><span class="line">test : <span class="variable">$(OBJ)</span></span><br><span class="line">        gcc -o  test  <span class="variable">$(OBJ)</span></span><br><span class="line">clean :</span><br><span class="line">        rm test <span class="variable">$(OBJ)</span></span><br></pre></td></tr></table></figure>
+<h3 id="5-预定义变量"><a href="#5-预定义变量" class="headerlink" title="5. 预定义变量"></a>5. 预定义变量</h3><table>
+<thead>
+<tr>
+<th>命令变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AR</td>
+<td>函数库的打包程序，默认为”ar”</td>
+</tr>
+<tr>
+<td>AS</td>
+<td>汇编语言编译程序,默认为”as”</td>
+</tr>
+<tr>
+<td>CC</td>
+<td>C语言编译程序,默认命令是”cc”</td>
+</tr>
+<tr>
+<td>CXX</td>
+<td>C++语言编译程序,默认命令是”g++”</td>
+</tr>
+<tr>
+<td>RM</td>
+<td>文件删除程序的名称,默认值为 rm –f</td>
+</tr>
+<tr>
+<td>ARFLAGS</td>
+<td>库文件维护程序的选项,无默认值</td>
+</tr>
+<tr>
+<td>ASFLAGS</td>
+<td>汇编程序的选项,无默认值</td>
+</tr>
+<tr>
+<td>CFLAGS</td>
+<td>C 编译器的选项,无默认值</td>
+</tr>
+<tr>
+<td>CPPFLAGS</td>
+<td>C 预编译的选项,无默认值</td>
+</tr>
+<tr>
+<td>CXXFLAGS</td>
+<td>C++编译器的选项,无默认值</td>
+</tr>
+</tbody>
+</table>
+<h3 id="6-自动变量"><a href="#6-自动变量" class="headerlink" title="6. 自动变量"></a>6. 自动变量</h3><blockquote>
+<p>$@  <code>target的名字</code>  </p>
 </blockquote>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main.o:main.c</span></span><br><span class="line">	gcc -c main.c -o main.o</span><br><span class="line"><span class="comment">#使用 $@ 代替 main.o</span></span><br><span class="line"><span class="section">main.o:main.c</span></span><br><span class="line">	gcc -c main.c -o <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>$&lt;  <code>target依赖的第一个依赖文件名</code></p>
+</blockquote>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">main.o:main.c a.h b.h</span></span><br><span class="line">	gcc -c main.c -o main.o</span><br><span class="line"><span class="comment">#使用 $&lt; 代替 main.c</span></span><br><span class="line"><span class="section">main.o:main.c a.h b.h</span></span><br><span class="line">	gcc -c <span class="variable">$&lt;</span> -o main.o</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$*</td>
+<td>不包含扩展名的target文件名称</td>
+</tr>
+<tr>
+<td>$+</td>
+<td>所有的依赖文件,以空格分开,并以出现的先后为序,可能包含 重复的依赖文件</td>
+</tr>
+<tr>
+<td>$?</td>
+<td>所有时间戳比target文件晚的依赖文件,并以空格分开</td>
+</tr>
+<tr>
+<td>$^</td>
+<td>所有不重复的依赖文件,以空格分开</td>
+</tr>
+</tbody>
+</table>
+<h3 id="7-条件语句"><a href="#7-条件语句" class="headerlink" title="7. 条件语句"></a>7. 条件语句</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">ifeq</span> (<span class="variable">$(CC)</span>,gcc)</span><br><span class="line">        <span class="variable">$(CC)</span> -o foo <span class="variable">$(objects)</span> <span class="variable">$(libs_for_gcc)</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">        <span class="variable">$(CC)</span> -o foo <span class="variable">$(objects)</span> <span class="variable">$(normal_libs)</span></span><br><span class="line"><span class="keyword">endif</span></span><br></pre></td></tr></table></figure>
+<h3 id="8-输出信息"><a href="#8-输出信息" class="headerlink" title="8. 输出信息"></a>8. 输出信息</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">AAA=123456</span><br><span class="line"><span class="comment">#输出变量AAA</span></span><br><span class="line"><span class="variable">$(<span class="built_in">warning</span> <span class="variable">$(AAA)</span>)</span></span><br><span class="line"><span class="variable">$(info <span class="variable">$(AAA)</span>)</span></span><br></pre></td></tr></table></figure>
+<h2 id="三、Android-mk"><a href="#三、Android-mk" class="headerlink" title="三、Android.mk"></a>三、Android.mk</h2><p>微小 GNU makefile 片段。</p>
+<p>将源文件分组为<em>模块</em>。 模块是静态库、共享库或独立可执行文件。 可在每个 <code>Android.mk</code> 文件中定义一个或多个模块，也可在多个模块中使用同一个源文件。</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#源文件在的位置。宏函数 my-dir 返回当前目录</span></span><br><span class="line">LOCAL_PATH := <span class="variable">$(<span class="built_in">call</span> my-<span class="built_in">dir</span>)</span></span><br><span class="line"><span class="comment">#可为您清除变量</span></span><br><span class="line"><span class="comment">#不会清理 LOCAL_PATH 变量</span></span><br><span class="line"><span class="keyword">include</span> <span class="variable">$(CLEAR_VARS)</span></span><br><span class="line"><span class="comment">#存储您要构建的模块的名称 每个模块名称必须唯一，且不含任何空格</span></span><br><span class="line"><span class="comment">#如果模块名称的开头已是 lib，则构建系统不会附加额外的前缀 lib；而是按原样采用模块名称，并添加 .so 扩展名。</span></span><br><span class="line">LOCAL_MODULE := hello-jni</span><br><span class="line"><span class="comment">#包含要构建到模块中的 C 和/或 C++ 源文件列表 以空格分开</span></span><br><span class="line">LOCAL_SRC_FILES := hello-jni.c</span><br><span class="line"><span class="comment">#构建动态库</span></span><br><span class="line"><span class="keyword">include</span> <span class="variable">$(BUILD_SHARED_LIBRARY)</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-变量和宏"><a href="#1-变量和宏" class="headerlink" title="1. 变量和宏"></a>1. 变量和宏</h3><p>定义自己的任意变量。在定义变量时请注意，NDK 构建系统会预留以下变量名称：</p>
+<ul>
+<li>以 <code>LOCAL_</code> 开头的名称，例如 <code>LOCAL_MODULE</code>。</li>
+<li>以 <code>PRIVATE_</code>、<code>NDK_</code> 或 <code>APP</code> 开头的名称。构建系统在内部使用这些变量。</li>
+<li>小写名称，例如 <code>my-dir</code>。构建系统也是在内部使用这些变量。</li>
+</ul>
+<p>如果为了方便而需要在 <code>Android.mk</code> 文件中定义自己的变量，建议在名称前附加 <code>MY_</code>。</p>
+<h3 id="2-常用内置变量"><a href="#2-常用内置变量" class="headerlink" title="2. 常用内置变量"></a>2. 常用内置变量</h3><table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BUILD_STATIC_LIBRARY</td>
+<td>构建静态库的Makefile脚本</td>
+<td>include $(BUILD_STATIC_LIBRARY)</td>
+</tr>
+<tr>
+<td>PREBUILT_SHARED_LIBRARY</td>
+<td>预编译共享库的Makeifle脚本</td>
+<td>include $(PREBUILT_SHARED_LIBRARY)</td>
+</tr>
+<tr>
+<td>PREBUILT_STATIC_LIBRARY</td>
+<td>预编译静态库的Makeifle脚本</td>
+<td>include $(PREBUILT_STATIC_LIBRARY)</td>
+</tr>
+<tr>
+<td>TARGET_PLATFORM</td>
+<td>Android API 级别号</td>
+<td>TARGET_PLATFORM := android-22</td>
+</tr>
+<tr>
+<td>TARGET_ARCH</td>
+<td>CUP架构</td>
+<td>arm arm64 x86 x86_64</td>
+</tr>
+<tr>
+<td>TARGET_ARCH_ABI</td>
+<td>CPU架构</td>
+<td>armeabi  armeabi-v7a  arm64-v8a</td>
+</tr>
+</tbody>
+</table>
+<p><strong>模块描述变量</strong></p>
+<table>
+<thead>
+<tr>
+<th>变量名</th>
+<th>描述</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LOCAL_MODULE_FILENAME</td>
+<td>覆盖构建系统默认用于其生成的文件的名称</td>
+<td>LOCAL_MODULE := foo LOCAL_MODULE_FILENAME := libnewfoo</td>
+</tr>
+<tr>
+<td>LOCAL_CPP_FEATURES</td>
+<td>特定 C++ 功能</td>
+<td>支持异常:LOCAL_CPP_FEATURES := exceptions</td>
+</tr>
+<tr>
+<td>LOCAL_C_INCLUDES</td>
+<td>头文件目录查找路径</td>
+<td>LOCAL_C_INCLUDES := $(LOCAL_PATH)/include</td>
+</tr>
+<tr>
+<td>LOCAL_CFLAGS</td>
+<td>构建 C <em>和</em> C++ 的编译参数</td>
+<td></td>
+</tr>
+<tr>
+<td>LOCAL_CPPFLAGS</td>
+<td>c++</td>
+<td></td>
+</tr>
+<tr>
+<td>LOCAL_STATIC_LIBRARIES</td>
+<td>当前模块依赖的静态库模块列表</td>
+<td></td>
+</tr>
+<tr>
+<td>LOCAL_SHARED_LIBRARIES</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>LOCAL_WHOLE_STATIC_LIBRARIES</td>
+<td>–whole-archive</td>
+<td>将未使用的函数符号也加入编译进入这个模块</td>
+</tr>
+<tr>
+<td>LOCAL_LDLIBS</td>
+<td>依赖 系统库</td>
+<td>LOCAL_LDLIBS := -lz</td>
+</tr>
+</tbody>
+</table>
+<p>导出给引入模块的模块使用</p>
+<p>LOCAL_EXPORT_CFLAGS</p>
+<p>LOCAL_EXPORT_CPPFLAGS</p>
+<p>LOCAL_EXPORT_C_INCLUDES</p>
+<p>LOCAL_EXPORT_LDLIBS</p>
+<h3 id="3-引入其他模块"><a href="#3-引入其他模块" class="headerlink" title="3. 引入其他模块"></a>3. 引入其他模块</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将一个新的路径加入NDK_MODULE_PATH变量</span></span><br><span class="line"><span class="comment">#NDK_MODULE_PATH 变量是系统环境变量</span></span><br><span class="line"><span class="variable">$(<span class="built_in">call</span> import-add-path,<span class="variable">$(LOCAL_PATH)</span>/platform/third_party/android/prebuilt)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#包含CocosDenshion/android目录下的mk文件</span></span><br><span class="line"><span class="variable">$(<span class="built_in">call</span> import-module,CocosDenshion/android)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#这里即为 我需要引入 CocosDenshion/android 下面的Android.mk</span></span><br><span class="line"><span class="comment">#CocosDenshion/android 的路径会从 $(LOCAL_PATH)/platform/third_party/android/prebuilt 去查找</span></span><br></pre></td></tr></table></figure>
+<h2 id="四、Application-mk"><a href="#四、Application-mk" class="headerlink" title="四、Application.mk"></a>四、Application.mk</h2><h3 id="1-配置"><a href="#1-配置" class="headerlink" title="1. 配置"></a>1. 配置</h3><p>同样是GNU Makefile 片段,在Application.mk中定义一些全局(整个项目)的配置</p>
+<p><strong>APP_OPTIM</strong></p>
+<p>将此可选变量定义为 <code>release</code> 或 <code>debug</code>。在构建应用的模块时可使用它来更改优化级别。发行模式是默认模式，可生成高度优化的二进制文件。调试模式会生成未优化的二进制文件，更容易调试。</p>
+<p><strong>APP_CFLAGS</strong></p>
+<p>为任何模块编译任何 C 或 C++ 源代码时传递到编译器的一组 C 编译器标志</p>
+<p><strong>APP_CPPFLAGS</strong></p>
+<p>构建 C++ 源文件时传递到编译器的一组 C++ 编译器标志。</p>
+<p><strong>APP_ABI</strong></p>
+<p>需要生成的cpu架构(ndk r17之上 只支持：armeabi-v7a, arm64-v8a, x86, x86_64)</p>
+<p><strong>APP_PLATFORM</strong></p>
+<p>此变量包含目标 Android 平台的名称。例如，<code>android-3</code> 指定 Android 1.5 系统映像</p>
+<p><strong>APP_STL</strong></p>
+<p>默认情况下，NDK 构建系统为 Android 系统提供的最小 C++ 运行时库 (<code>system/lib/libstdc++.so</code>) 提供 C++ 功能。 </p>
+<h3 id="2-APP-ABI架构"><a href="#2-APP-ABI架构" class="headerlink" title="2. APP_ABI架构"></a>2. APP_ABI架构</h3><p>不同 Android 手机使用不同的 CPU，因此支持不同的指令集。</p>
+<p><strong>armeabi</strong></p>
+<p>此 ABI 适用于基于 ARM、至少支持 ARMv5TE 指令集的 CPU。此 ABI 不支持硬件辅助的浮点计算。 相反，所有浮点运算都使用编译器 <code>libgcc.a</code> 静态库中的软件帮助程序函数。</p>
+<p><strong>armeabi-v7a</strong></p>
+<p><code>armeabi-v7a</code> ABI 使用 <code>-mfloat-abi=softfp</code> 开关强制实施规则，要求编译器在函数调用时必须传递核心寄存器对中的所有双精度值，而不是专用浮点值。 系统可以使用 FP 寄存器执行所有内部计算。 这样可极大地加速计算。</p>
+<p>如果要以 armeabi-v7a ABI 为目标，则必须设置下列标志：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CFLAGS= -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16</span><br></pre></td></tr></table></figure>
+<p><strong>arm64-v8a</strong></p>
+<p>此 ABI 适用于基于 ARMv8、支持 AArch64 的 CPU。它还包含 NEON 和 VFPv4 指令集。</p>
+<p><strong>x86</strong></p>
+<p>此 ABI 适用于支持通常称为“x86”或“IA-32”的指令集的 CPU。设置的标志如：</p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-march=i686 -mtune=intel -mssse3 -mfpmath=sse -m32</span><br></pre></td></tr></table></figure>
+<p><strong>x86_64</strong></p>
+<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-march=x86-64 -msse4.2 -mpopcnt -m64 -mtune=intel</span><br></pre></td></tr></table></figure>
+<p>现在手机主要是armeabi-v7a。查看手机cpu：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adb shell cat /proc/cpuinfo</span><br><span class="line">adb shell getprop ro.product.cpu.abi</span><br></pre></td></tr></table></figure>
+<p>apk在安装的时候，如果手机是armeabi-v7a的，则会首先查看apk中是否存在armeabi-v7a目录，如果没有就会查找armeabi。</p>
+<p><strong>保证cpu目录下so数量一致。</strong></p>
+<pre><code>如果目标是armeabi-v7a，但是拥有一个armeabi的，也可以把它放到armeabi-v7a目录下。但是反过来不行
+</code></pre><table>
+<thead>
+<tr>
+<th>ABI(横 so)/CPU(竖 手机)</th>
+<th>armeabi</th>
+<th>armeabi-v7a</th>
+<th>arm64-v8a</th>
+<th>x86</th>
+<th>x86_64</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ARMV5</td>
+<td>支持</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ARMV7</td>
+<td>支持</td>
+<td>支持</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>ARMV8</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>X86</td>
+<td></td>
+<td></td>
+<td></td>
+<td>支持</td>
+<td></td>
+</tr>
+<tr>
+<td>X86_64</td>
+<td></td>
+<td></td>
+<td></td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+</tbody>
+</table>
 
       </div>
       
@@ -320,10 +592,10 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-28T17:50:48+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-31T18:01:57+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
-    <p>更新于 2019年10月28日</p>
+    <p>更新于 2019年10月31日</p>
   </a>
 </div>
 
@@ -343,7 +615,7 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://ddssingsong.github.io/android/ndk/ndk-12/&title=【NDK系列12】编译器 clang gcc g++ | 哒哒瑟&summary=了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://ddssingsong.github.io/android/ndk/ndk-12/&title=【NDK系列12】Makefile Android.mk Application.mk 详解 | 哒哒瑟&summary=我们在使用第三方库时，很多都提供makefile，我们需要读懂他们并且适当的修改他们，另外虽说现在google推荐使用cmake，但是如果遇见Android.mk还是需要能够读懂。">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
           
@@ -351,7 +623,7 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://ddssingsong.github.io/android/ndk/ndk-12/&title=【NDK系列12】编译器 clang gcc g++ | 哒哒瑟&summary=了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://ddssingsong.github.io/android/ndk/ndk-12/&title=【NDK系列12】Makefile Android.mk Application.mk 详解 | 哒哒瑟&summary=我们在使用第三方库时，很多都提供makefile，我们需要读懂他们并且适当的修改他们，另外虽说现在google推荐使用cmake，但是如果遇见Android.mk还是需要能够读懂。">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
           
@@ -367,7 +639,7 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://ddssingsong.github.io/android/ndk/ndk-12/&title=【NDK系列12】编译器 clang gcc g++ | 哒哒瑟&summary=了解c/c++编译器的基本使用，能够在后续移植第三方框架进行交叉编译时，清楚的了解应该传递什么参数。">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://ddssingsong.github.io/android/ndk/ndk-12/&title=【NDK系列12】Makefile Android.mk Application.mk 详解 | 哒哒瑟&summary=我们在使用第三方库时，很多都提供makefile，我们需要读懂他们并且适当的修改他们，另外虽说现在google推荐使用cmake，但是如果遇见Android.mk还是需要能够读懂。">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
           
@@ -393,12 +665,17 @@
                       <span class="art-item-left">
                           <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
                           <h4>
-                              <a href="/android/ndk/ndk-8/" rel="prev" title="post">
+                              <a href="/android/ndk/ndk-13/" rel="prev" title="【NDK系列13】Cmake详解 CMakeLists.txt详细配置">
                                 
-                                    post
+                                    【NDK系列13】Cmake详解 CMakeLists.txt详细配置
                                 
                               </a>
                           </h4>
+                          
+                              
+                              <h6 class="tags">
+                                  <a class="tag" href="/blog/tags/NDK/"><i class="fas fa-tag fa-fw" aria-hidden="true"></i> NDK</a>
+                              </h6>
                           
                       </span>
                   </section>
@@ -408,9 +685,9 @@
                       <span class="art-item-right" aria-hidden="true">
                           <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
                           <h4>
-                              <a href="/android/ndk/ndk-7/" rel="prev" title="【NDK系列7】c/c++ 文件与流操作">
+                              <a href="/android/ndk/ndk-11/" rel="prev" title="【NDK系列11】编译器 clang gcc g++">
                                   
-                                      【NDK系列7】c/c++ 文件与流操作
+                                      【NDK系列11】编译器 clang gcc g++
                                   
                               </a>
                           </h4>
@@ -461,7 +738,7 @@
 
   <script>
     window.subData = {
-      title: '【NDK系列12】编译器 clang gcc g++',
+      title: '【NDK系列12】Makefile Android.mk Application.mk 详解',
       tools: true
     }
   </script>
@@ -500,9 +777,9 @@
     <div class="content pure">
       <ul class="entry">
         
-          <li><a class="flat-box" title="/blog/categories/Android/" href="/blog/categories/Android/"><div class="name">Android</div><div class="badge">(8)</div></a></li>
+          <li><a class="flat-box" title="/blog/categories/Android/" href="/blog/categories/Android/"><div class="name">Android</div><div class="badge">(13)</div></a></li>
         
-          <li><a class="flat-box child" title="/blog/categories/Android/NDK/" href="/blog/categories/Android/NDK/"><div class="name">NDK</div><div class="badge">(8)</div></a></li>
+          <li><a class="flat-box child" title="/blog/categories/Android/NDK/" href="/blog/categories/Android/NDK/"><div class="name">NDK</div><div class="badge">(13)</div></a></li>
         
           <li><a class="flat-box" title="/blog/categories/Hexo/" href="/blog/categories/Hexo/"><div class="name">Hexo</div><div class="badge">(11)</div></a></li>
         
@@ -548,7 +825,7 @@
 </header>
 
     <div class="content pure">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-gcc-g-clang"><span class="toc-text">1. gcc/g++/clang</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#clang"><span class="toc-text">clang</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gcc"><span class="toc-text">gcc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#g"><span class="toc-text">g++</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-编译器过程"><span class="toc-text">2. 编译器过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1、预处理"><span class="toc-text">1、预处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2、编译阶段"><span class="toc-text">2、编译阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3、汇编阶段"><span class="toc-text">3、汇编阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4、链接阶段"><span class="toc-text">4、链接阶段</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-text">其他</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、什么是Makefile"><span class="toc-text">一、什么是Makefile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、Makefile规则"><span class="toc-text">二、Makefile规则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-基本用法"><span class="toc-text">1. 基本用法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-变量"><span class="toc-text">2. 变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-include"><span class="toc-text">3. include</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-文件搜索"><span class="toc-text">4. 文件搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-预定义变量"><span class="toc-text">5. 预定义变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-自动变量"><span class="toc-text">6. 自动变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-条件语句"><span class="toc-text">7. 条件语句</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-输出信息"><span class="toc-text">8. 输出信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、Android-mk"><span class="toc-text">三、Android.mk</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-变量和宏"><span class="toc-text">1. 变量和宏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-常用内置变量"><span class="toc-text">2. 常用内置变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-引入其他模块"><span class="toc-text">3. 引入其他模块</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、Application-mk"><span class="toc-text">四、Application.mk</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-配置"><span class="toc-text">1. 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-APP-ABI架构"><span class="toc-text">2. APP_ABI架构</span></a></li></ol></li></ol>
     </div>
   </section>
 
