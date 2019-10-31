@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  <title>【NDK系列6】C++ 容器 | 哒哒瑟</title>
+  
+  <meta name="keywords" content="Android,Java,Linux">
+  
+  
+
+  
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- meta -->
+  
+  
+  <meta name="theme-color" content="#FFFFFF">
+  <meta name="msapplication-TileColor" content="#1BC3FB">
+  <meta name="msapplication-config" content="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-favicon@19.9.6/browserconfig.xml">
+  
+
+  <!-- link -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.css">
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.10.1/css/all.min.css">
+  
+  
+  <link rel="shortcut icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-favicon@19.9.6/favicon.ico">
+  <link rel="icon" type="image/x-icon" sizes="32x32" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-favicon@19.9.6/favicon-32x32.png">
+  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-favicon@19.9.6/apple-touch-icon.png">
+  <link rel="mask-icon" color="#1BC3FB" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-favicon@19.9.6/safari-pinned-tab.svg">
+  <link rel="manifest" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-favicon@19.9.6/site.webmanifest">
+  
+
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.10.22/css/style.css">
+  
+
+  <script>
+    function setLoadingBarProgress(num) {
+      document.getElementById('loading-bar').style.width=num+"%";
+    }
+  </script>
+
+  
+  
+</head>
+
+<body>
+  
+  
+  <header class="l_header pure">
+  <div id="loading-bar-wrapper">
+    <div id="loading-bar" class="pure"></div>
+  </div>
+
+	<div class="wrapper">
+		<div class="nav-main container container--flex">
+      <a class="logo flat-box" href="/">
+        
+          <img class="logo" src="/assets/logo.png">
+        
+      </a>
+			<div class="menu navgation">
+				<ul class="h-list">
+          
+  					
+  						<li>
+								<a class="nav flat-box" href="/" id="home">
+									<i class="fas fa-grin fa-fw"></i>&nbsp;博文
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/categories/" rel="nofollow" id="blogcategories">
+									<i class="fas fa-folder-open fa-fw"></i>&nbsp;分类
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/tags/" rel="nofollow" id="blogtags">
+									<i class="fas fa-hashtag fa-fw"></i>&nbsp;标签
+								</a>
+							</li>
+      			
+  						<li>
+								<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
+									<i class="fas fa-archive fa-fw"></i>&nbsp;归档
+								</a>
+							</li>
+      			
+      		
+				</ul>
+			</div>
+
+			
+				<div class="m_search">
+					<form name="searchform" class="form u-search-form">
+						<input type="text" class="input u-search-input" placeholder="搜索">
+						<i class="icon fas fa-search fa-fw"></i>
+					</form>
+				</div>
+			
+			<ul class="switcher h-list">
+				
+					<li class="s-search"><a class="fas fa-search fa-fw" href="javascript:void(0)"></a></li>
+				
+				<li class="s-menu"><a class="fas fa-bars fa-fw" href="javascript:void(0)"></a></li>
+			</ul>
+		</div>
+
+		<div class="nav-sub container container--flex">
+			<a class="logo flat-box"></a>
+			<ul class="switcher h-list">
+				<li class="s-comment"><a class="flat-btn fas fa-comments fa-fw" href="javascript:void(0)"></a></li>
+        
+          <li class="s-toc"><a class="flat-btn fas fa-list fa-fw" href="javascript:void(0)"></a></li>
+        
+			</ul>
+		</div>
+	</div>
+</header>
+	<aside class="menu-phone">
+    <header>
+		<nav class="menu navgation">
+      <ul>
+        
+          
+            <li>
+							<a class="nav flat-box" href="/" id="home">
+								<i class="fas fa-clock fa-fw"></i>&nbsp;近期文章
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/blog/archives/" rel="nofollow" id="blogarchives">
+								<i class="fas fa-archive fa-fw"></i>&nbsp;文章归档
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/projects/" id="projects">
+								<i class="fas fa-code-branch fa-fw"></i>&nbsp;开源项目
+							</a>
+            </li>
+          
+            <li>
+							<a class="nav flat-box" href="/about/" rel="nofollow" id="about">
+								<i class="fas fa-info-circle fa-fw"></i>&nbsp;关于小站
+							</a>
+            </li>
+          
+       
+      </ul>
+		</nav>
+    </header>
+	</aside>
+<script>setLoadingBarProgress(40);</script>
+
+
+
+  <div class="l_body nocover">
+    <div class='body-wrapper'>
+      <div class="l_main">
+  
+
+  <article id="post" class="post white-box article-type-post" itemscope="" itemprop="blogPost">
+    
+
+
+  <section class="meta">
+    
+    
+    <div class="meta" id="header-meta">
+      
+        
+  
+    <h1 class="title">
+      <a href="/android/ndk/ndk-6/">
+        【NDK系列6】C++ 容器
+      </a>
+    </h1>
+  
+
+
+      
+      <div class="new-meta-box">
+        
+          
+        
+          
+            
+  <div class="new-meta-item author">
+    
+      <a href="https://ddssingsong.github.io" rel="nofollow">
+        
+          <i class="fas fa-user" aria-hidden="true"></i>
+        
+        <p>大大帅</p>
+      </a>
+    
+  </div>
+
+
+          
+        
+          
+            <div class="new-meta-item date">
+  <a class="notlink">
+    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+    <p>2019-10-03</p>
+  </a>
+</div>
+
+          
+        
+          
+            
+  
+  <div class="new-meta-item category">
+    <a href="/blog/categories/Android/NDK/" rel="nofollow">
+      <i class="fas fa-folder-open" aria-hidden="true"></i>
+      <p>Android&nbsp;/&nbsp;NDK</p>
+    </a>
+  </div>
+
+
+          
+        
+          
+            
+  
+    <div class="new-meta-item browse busuanzi">
+      <a class="notlink">
+        <i class="fas fa-eye" aria-hidden="true"></i>
+        <p>
+          <span id="busuanzi_value_page_pv">
+            <i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i>
+          </span>
+        </p>
+      </a>
+    </div>
+  
+
+
+          
+        
+          
+            
+
+          
+        
+      </div>
+      
+        <hr>
+      
+    </div>
+  </section>
+
+
+    <section class="article typo">
+      <div class="article-entry" itemprop="articleBody">
+        <p>容器，就是用来存放东西的盒子。</p>
+<p>常用的容器包括：数组array,  链表list，  树tree，  栈stack，  队列queue，  散列表hash table,  集合set、映射表map 等等。容器便是容纳这些数据结构的。这些数据结构分为序列式与关联式两种，容器也分为<strong>序列式容器</strong>和<strong>关联式容器</strong>。</p>
+<a id="more"></a>
+<p>STL 标准模板库，核心包括容器、算法、迭代器。</p>
+<p>元素排列次序与元素无关，由元素添加到容器的顺序决定</p>
+<h3 id="一、序列式容器-顺序容器"><a href="#一、序列式容器-顺序容器" class="headerlink" title="一、序列式容器/顺序容器"></a>一、序列式容器/顺序容器</h3><table>
+<thead>
+<tr>
+<th>容器</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>vector</td>
+<td>支持快速随机访问</td>
+</tr>
+<tr>
+<td>list</td>
+<td>支持快速插入、删除</td>
+</tr>
+<tr>
+<td>deque</td>
+<td>双端队列  允许两端都可以进行入队和出队操作的队列</td>
+</tr>
+<tr>
+<td>stack</td>
+<td>后进先出LIFO(Last In First Out)堆栈</td>
+</tr>
+<tr>
+<td>queue</td>
+<td>先进先出FIFO(First Input First Output)队列</td>
+</tr>
+<tr>
+<td>priority_queue</td>
+<td>有优先级管理的queue</td>
+</tr>
+</tbody>
+</table>
+<h4 id="1-向量-vector"><a href="#1-向量-vector" class="headerlink" title="1. 向量(vector)"></a>1. 向量(vector)</h4><blockquote>
+<p>连续存储的元素 </p>
+</blockquote>
+<p><strong>迭代器</strong>的实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//获得指向首元素的迭代器  模板类，不是指针，当做指针来使用</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator it = vec.begin();</span><br><span class="line"><span class="comment">//遍历元素</span></span><br><span class="line"><span class="keyword">for</span> (; it &lt; vec.end(); it++)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; *it &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//begin和end   分别获得 指向容器第一个元素和最后一个元素下一个位置的迭代器</span></span><br><span class="line"><span class="comment">//rbegin和rend 分别获得 指向容器最后一个元素和第一个元素前一个位置的迭代器</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//注意循环中操作元素对迭代器的影响</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;::iterator it = vec.begin();</span><br><span class="line"><span class="keyword">for</span> (; it &lt; vec.end(); )&#123;</span><br><span class="line">    <span class="comment">//删除值为2的元素 </span></span><br><span class="line">	<span class="keyword">if</span> (*it == <span class="number">2</span>) &#123;</span><br><span class="line">		vec.erase(it);</span><br><span class="line">	&#125;<span class="keyword">else</span> &#123;</span><br><span class="line">		it++;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-列表-list"><a href="#2-列表-list" class="headerlink" title="2. 列表 (list)"></a>2. 列表 (list)</h4><blockquote>
+<p>由节点组成的双向链表，每个结点包含着一个元素  </p>
+</blockquote>
+<h4 id="3-双端队列-deque"><a href="#3-双端队列-deque" class="headerlink" title="3. 双端队列(deque)"></a>3. 双端队列(deque)</h4><blockquote>
+<p>连续存储的指向不同元素的指针所组成的数组 </p>
+</blockquote>
+<h4 id="4-栈-stack"><a href="#4-栈-stack" class="headerlink" title="4. 栈(stack)"></a>4. 栈(stack)</h4><blockquote>
+<p>后进先出的值的排列 </p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">stack</span>&lt;<span class="keyword">int</span>&gt; s;</span><br><span class="line"><span class="comment">//入栈</span></span><br><span class="line">s.push(<span class="number">1</span>);</span><br><span class="line">s.push(<span class="number">2</span>);</span><br><span class="line"><span class="comment">//弹栈</span></span><br><span class="line">s.pop();</span><br><span class="line"><span class="comment">//栈顶</span></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; s.top() &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="5-队列-queue"><a href="#5-队列-queue" class="headerlink" title="5. 队列(queue)"></a>5. 队列(queue)</h4><blockquote>
+<p>先进先出的值的排列 </p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; q;</span><br><span class="line">q.push(<span class="number">1</span>);</span><br><span class="line">q.push(<span class="number">2</span>);</span><br><span class="line"><span class="comment">//移除最后一个</span></span><br><span class="line">q.pop();</span><br><span class="line"><span class="comment">//获得第一个</span></span><br><span class="line">q.front();</span><br><span class="line"><span class="comment">//最后一个元素</span></span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; q.back() &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="6-优先队列-priority-queue"><a href="#6-优先队列-priority-queue" class="headerlink" title="6. 优先队列(priority_queue )"></a>6. 优先队列(priority_queue )</h4><blockquote>
+<p>元素的次序是由所存储的数据的某个值排列的一种队列 </p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//最大的在队首</span></span><br><span class="line">priority_queue&lt;<span class="keyword">int</span>&gt;;</span><br><span class="line"><span class="comment">//在vector之上实现的</span></span><br><span class="line">priority_queue&lt;<span class="keyword">int</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;, less&lt;<span class="keyword">int</span>&gt; &gt;; </span><br><span class="line"><span class="comment">//vector 承载底层数据结构堆的容器</span></span><br><span class="line"><span class="comment">//less 表示数字大的优先级高，而 greater 表示数字小的优先级高</span></span><br><span class="line"><span class="comment">//less  	 让优先队列总是把最大的元素放在队首</span></span><br><span class="line"><span class="comment">//greater    让优先队列总是把最小的元素放在队首</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//less和greater都是一个模板结构体 也可以自定义</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">int</span> grade;</span><br><span class="line">	Student(<span class="keyword">int</span> grade):grade(grade) &#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">cmp</span> &#123;</span></span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">operator</span> <span class="params">()</span><span class="params">(Student* s1, Student* s2)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// &gt; 从小到大</span></span><br><span class="line">        <span class="comment">// &lt; 从大到小 </span></span><br><span class="line">		<span class="keyword">return</span> s1-&gt;grade &gt; s2-&gt;grade;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">operator</span> <span class="params">()</span><span class="params">(Student s1, Student s2)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> s1.grade &gt; s2.grade;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line">priority_queue&lt;Student*, <span class="built_in">vector</span>&lt;Student*&gt;, cmp &gt; q1;</span><br><span class="line">q1.push(<span class="keyword">new</span> Student(<span class="number">2</span>));</span><br><span class="line">q1.push(<span class="keyword">new</span> Student(<span class="number">1</span>));</span><br><span class="line">q1.push(<span class="keyword">new</span> Student(<span class="number">3</span>));</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; q1.top()-&gt;grade &lt;&lt; <span class="built_in">endl</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="二、关联式容器"><a href="#二、关联式容器" class="headerlink" title="二、关联式容器"></a>二、关联式容器</h3><blockquote>
+<p>关联容器和大部分顺序容器操作一致</p>
+<p>关联容器中的元素是按关键字来保存和访问的 支持高效的关键字查找与访问</p>
+</blockquote>
+<h4 id="1-集合-set"><a href="#1-集合-set" class="headerlink" title="1. 集合(set)"></a>1. 集合(set)</h4><blockquote>
+<p>由节点组成的红黑树，每个节点都包含着一个元素,元素不可重复</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span>&lt;<span class="built_in">string</span>&gt; a;  </span><br><span class="line"><span class="built_in">set</span>&lt;<span class="built_in">string</span>&gt; a1=&#123;<span class="string">"fengxin"</span>,<span class="string">"666"</span>&#125;;</span><br><span class="line">a.insert(<span class="string">"fengxin"</span>);  <span class="comment">// 插入一个元素</span></span><br><span class="line">a.erase(<span class="string">"123"</span>);	<span class="comment">//删除</span></span><br></pre></td></tr></table></figure>
+<h4 id="2-键值对-map"><a href="#2-键值对-map" class="headerlink" title="2. 键值对(map)"></a>2. 键值对(map)</h4><blockquote>
+<p>由{键，值}对组成的集合</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt; m;</span><br><span class="line"><span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt; m1 = &#123; &#123; <span class="number">1</span>,<span class="string">"dds"</span> &#125;,&#123; <span class="number">2</span>,<span class="string">"dds"</span> &#125; &#125;;</span><br><span class="line"><span class="comment">//插入元素</span></span><br><span class="line">m1.insert(&#123; <span class="number">3</span>,<span class="string">"ddss"</span> &#125;);</span><br><span class="line"><span class="comment">//pair=键值对</span></span><br><span class="line">pair&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt; p(<span class="number">4</span>, <span class="string">"ddsd"</span>);</span><br><span class="line">m1.insert(p);</span><br><span class="line"><span class="comment">//insetrt 返回 map&lt;int, string&gt;::iterator : bool 键值对</span></span><br><span class="line"><span class="comment">//如果 插入已经存在的 key，则会插入失败   </span></span><br><span class="line"><span class="comment">//multimap：允许重复key</span></span><br><span class="line"><span class="comment">//使用m1[3] = "xx" 能够覆盖</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//通过【key】操作元素</span></span><br><span class="line">m1[<span class="number">5</span>] = <span class="string">"yihan"</span>;</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; m1[<span class="number">5</span>].c_str() &lt;&lt; <span class="built_in">endl</span>; </span><br><span class="line"><span class="comment">//通过key查找元素</span></span><br><span class="line"><span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt;::iterator it = m1.find(<span class="number">3</span>);</span><br><span class="line"><span class="built_in">cout</span> &lt;&lt; (*it).second.c_str()&lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"><span class="comment">// 删除 </span></span><br><span class="line">m1.erase(<span class="number">5</span>);</span><br><span class="line"><span class="comment">//遍历</span></span><br><span class="line"><span class="keyword">for</span> (it = m1.begin(); it != m1.end(); it++)</span><br><span class="line">&#123;</span><br><span class="line">	pair&lt;<span class="keyword">int</span>, <span class="built_in">string</span>&gt; item = *it;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; item.first &lt;&lt; <span class="string">":"</span> &lt;&lt; item.second.c_str() &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>unordered_map</p>
+<p> c++11取代hash_map（哈希表实现，无序）</p>
+<p>哈希表实现查找速度会比RB树实现快,但rb整体更节省内存</p>
+<p>需要无序容器，高频快速查找删除，数据量较大用unordered_map；</p>
+<p>需要有序容器，查找删除频率稳定，在意内存时用map。</p>
+<h4 id="3-红黑树"><a href="#3-红黑树" class="headerlink" title="3. 红黑树"></a>3. 红黑树</h4><p>红黑树(Red Black Tree)又称为 RB树,是一种相对平衡二叉树 。</p>
+<blockquote>
+<p>1.节点是红色或黑色。</p>
+<p>2.根节点是黑色。</p>
+<p>3.每个叶子节点(空节点)都是黑色的。</p>
+<p>4 每个红色节点的两个子节点都是黑色。(从每个叶子到根的所有路径上不能有两个连续的红色节点)</p>
+<p>5.从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点。</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190626161810620.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTEwNzcwMjc=,size_16,color_FFFFFF,t_70" alt="1、插入7"></p>
+<blockquote>
+<ol>
+<li>插入新节点总是红色节点</li>
+<li>如果插入节点的父节点是黑色, 能维持性质</li>
+<li>如果插入节点的父节点是红色, 破坏了性质。插入算法就是通过重新着色或旋转, 来维持性质</li>
+</ol>
+</blockquote>
+<blockquote>
+<p>插入 7 后,破坏了规则，那么需要根据不同的状况进行不同的策略使其平衡并符合规则。</p>
+<p>7的父节点8 与叔父节点 12 都是红色，则我们可以将8、12两个重绘为黑色并重绘祖父节点9为红色。</p>
+<p>这里9是根节点，为了满足规则1，又把它重绘为黑色 .</p>
+<p>经过调整：</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190626161743148.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTEwNzcwMjc=,size_16,color_FFFFFF,t_70" alt="1、插入7"></p>
+<blockquote>
+<p>现在满足5个规则，因此7插入完成。</p>
+<p>接下来插入 6</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190626161829356.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTEwNzcwMjc=,size_16,color_FFFFFF,t_70" alt="插入6"></p>
+<blockquote>
+<p>现在新节点 6 是 父节点 7的左节点，而6的叔父节点 缺少，父节点 7 又是祖父节点8的左子节点 ，</p>
+<p>这种情形下，我们进行针对6节点的祖父节点8的一次右旋转</p>
+<p>右旋转：</p>
+<p>顺时针旋转红黑树的两个节点，使得父节点被自己的左孩子取代，而自己成为自己的右孩子。</p>
+<p>左旋转则倒过来</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190626161844399.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTEwNzcwMjc=,size_16,color_FFFFFF,t_70" alt="插入6右旋"></p>
+<blockquote>
+<p>再切换 7 和 8 的颜色</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/2019062616185649.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTEwNzcwMjc=,size_16,color_FFFFFF,t_70" alt="插入6旋转切换颜色"></p>
+<blockquote>
+<p>再插入5，5和6都是红色，将 父节点 6 和叔父节点 8 绘为黑色，祖父7设为红色，最终</p>
+</blockquote>
+<p><img src="https://img-blog.csdnimg.cn/20190626161905154.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTEwNzcwMjc=,size_16,color_FFFFFF,t_70" alt="最终插入5"></p>
+
+      </div>
+      
+        <br>
+        
+
+
+  <section class="meta" id="footer-meta">
+    <div class="new-meta-box">
+      
+        
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-31T16:17:46+08:00">
+  <a class="notlink">
+    <i class="fas fa-clock" aria-hidden="true"></i>
+    <p>更新于 2019年10月31日</p>
+  </a>
+</div>
+
+        
+      
+        
+          
+  
+  <div class="new-meta-item meta-tags"><a class="tag" href="/blog/tags/NDK/" rel="nofollow"><i class="fas fa-tag" aria-hidden="true"></i><p>NDK</p></a></div>
+
+
+        
+      
+        
+          
+  <div class="new-meta-item share -mob-share-list">
+  <div class="-mob-share-list share-body">
+    
+      
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://ddssingsong.github.io/android/ndk/ndk-6/&title=【NDK系列6】C++ 容器 | 哒哒瑟&summary=容器，就是用来存放东西的盒子。
+常用的容器包括：数组array,  链表list，  树tree，  栈stack，  队列queue，  散列表hash table,  集合set、映射表map 等等。容器便是容纳这些数据结构的。这些数据结构分为序列式与关联式两种，容器也分为序列式容器和关联式容器。">
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
+          
+        </a>
+      
+    
+      
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://ddssingsong.github.io/android/ndk/ndk-6/&title=【NDK系列6】C++ 容器 | 哒哒瑟&summary=容器，就是用来存放东西的盒子。
+常用的容器包括：数组array,  链表list，  树tree，  栈stack，  队列queue，  散列表hash table,  集合set、映射表map 等等。容器便是容纳这些数据结构的。这些数据结构分为序列式与关联式两种，容器也分为序列式容器和关联式容器。">
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
+          
+        </a>
+      
+    
+      
+        <a class="qrcode" rel="external nofollow noopener noreferrer" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJ0lEQVR42u3aS04DMRAFQO5/6SCxQgKG99pDROzyKkogcc2i1b+3t/g8Ps5drz+f6/dvPhgYGC/LeFyer1fJv+en/70GJJ9+cx8MDIwDGHmQ/foDK4/j+m+Su2FgYGDkqdvs0u3jw8DAwMgL1zZZzJNRDAwMjJUi9vpaOSB/509qcQwMjBdkPH8wkL/+1/MNDAyMpzAeo5MkbSvt/vo+GBgYWzPaovTeJlqSbhaBGAMDY2tGXnbmKxSz5K8tVn+pyDEwMDZizIrMfFQwu1bdVsPAwNiU0Q4L15ckEl67goaBgXEa467CMhl/5osUUaMNAwNjU0Ye/togmKSVbdEbJY4YGBjbMWZLV3nJmoNzdj2JxcDAeHFGHgSTH2sD5ew7o8kGBgbGRow2aLYDy1lgrZt0GBgYhzHy0jQPi3n7bBiCMTAwtmbk48Y2yK4ML9vgjoGBcQJjtsjVDiDrYWS53oGBgbErI79oPsicheaVTzEwMPZmtC34WXE7eyjtoAIDA+MERt44S1pj62G3TVUxMDBOYMy+ug3Es/FAPRjAwMDYjjFrvrfLXu1wNP9dDAyMvRmP8uShdj2hLFJPDAyMrRn5Wf+x9VWz2WIHBgbGHoxZkF0fEtSt/3YJDAMDYzvGXQ21FV77uDEwMDDagJvHwJXuYDESwMDAOJLRJnN5yG4XNTAwMM5ktGPIWYK4vuSBgYFxJmOWqCXBN39YeaI5bMZhYGC8KuMdTD/wLmslXzYAAAAASUVORK5CYII=">
+        
+          <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/wechat.png">
+        
+        </a>
+      
+    
+      
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://ddssingsong.github.io/android/ndk/ndk-6/&title=【NDK系列6】C++ 容器 | 哒哒瑟&summary=容器，就是用来存放东西的盒子。
+常用的容器包括：数组array,  链表list，  树tree，  栈stack，  队列queue，  散列表hash table,  集合set、映射表map 等等。容器便是容纳这些数据结构的。这些数据结构分为序列式与关联式两种，容器也分为序列式容器和关联式容器。">
+          
+            <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
+          
+        </a>
+      
+    
+  </div>
+</div>
+
+
+
+        
+      
+    </div>
+  </section>
+
+
+      
+      
+          <div class="prev-next">
+              
+                  <section class="prev">
+                      <span class="art-item-left">
+                          <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
+                          <h4>
+                              <a href="/android/ndk/ndk-7/" rel="prev" title="【NDK系列7】c/c++ 文件与流操作">
+                                
+                                    【NDK系列7】c/c++ 文件与流操作
+                                
+                              </a>
+                          </h4>
+                          
+                              
+                              <h6 class="tags">
+                                  <a class="tag" href="/blog/tags/NDK/"><i class="fas fa-tag fa-fw" aria-hidden="true"></i> NDK</a>
+                              </h6>
+                          
+                      </span>
+                  </section>
+              
+              
+                  <section class="next">
+                      <span class="art-item-right" aria-hidden="true">
+                          <h6>下一页&nbsp;<i class="fas fa-chevron-right" aria-hidden="true"></i></h6>
+                          <h4>
+                              <a href="/android/ndk/ndk-5/" rel="prev" title="【NDK系列5】c++ 面向对象编程">
+                                  
+                                      【NDK系列5】c++ 面向对象编程
+                                  
+                              </a>
+                          </h4>
+                          
+                              
+                              <h6 class="tags">
+                                  <a class="tag" href="/blog/tags/NDK/"><i class="fas fa-tag fa-fw" aria-hidden="true"></i> NDK</a>
+                              </h6>
+                          
+                      </span>
+                  </section>
+              
+          </div>
+      
+    </section>
+  </article>
+
+
+
+  <!-- 显示推荐文章和评论 -->
+
+
+
+  <article class="post white-box comments">
+    <section class="article typo">
+      <h4><i class="fas fa-comments fa-fw" aria-hidden="true"></i>&nbsp;评论</h4>
+      
+      
+      
+      
+        <section id="comments">
+          <div id="valine_container" class="valine_thread">
+            <i class="fas fa-spinner fa-spin fa-fw"></i>
+          </div>
+        </section>
+      
+    </section>
+  </article>
+
+
+
+
+
+
+<!-- 根据页面mathjax变量决定是否加载MathJax数学公式js -->
+
+
+
+  <script>
+    window.subData = {
+      title: '【NDK系列6】C++ 容器',
+      tools: true
+    }
+  </script>
+
+
+</div>
+<aside class="l_side">
+  
+    
+    
+      
+        
+          
+          
+        
+          
+          
+        
+          
+          
+        
+          
+          
+            
+              
+  <section class="widget category">
+    
+<header class="pure">
+  <div><i class="fas fa-folder-open fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;文章分类</div>
+  
+    <a class="rightBtn" rel="nofollow" href="/blog/categories/" title="blog/categories/">
+    <i class="fas fa-expand-arrows-alt fa-fw"></i></a>
+  
+</header>
+
+    <div class="content pure">
+      <ul class="entry">
+        
+          <li><a class="flat-box" title="/blog/categories/Android/" href="/blog/categories/Android/"><div class="name">Android</div><div class="badge">(8)</div></a></li>
+        
+          <li><a class="flat-box child" title="/blog/categories/Android/NDK/" href="/blog/categories/Android/NDK/"><div class="name">NDK</div><div class="badge">(8)</div></a></li>
+        
+          <li><a class="flat-box" title="/blog/categories/Hexo/" href="/blog/categories/Hexo/"><div class="name">Hexo</div><div class="badge">(11)</div></a></li>
+        
+          <li><a class="flat-box child" title="/blog/categories/Hexo/hexo/" href="/blog/categories/Hexo/hexo/"><div class="name">hexo</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box child" title="/blog/categories/Hexo/materialX/" href="/blog/categories/Hexo/materialX/"><div class="name">materialX</div><div class="badge">(1)</div></a></li>
+        
+          <li><a class="flat-box child" title="/blog/categories/Hexo/教程/" href="/blog/categories/Hexo/教程/"><div class="name">教程</div><div class="badge">(9)</div></a></li>
+        
+      </ul>
+    </div>
+  </section>
+
+
+            
+          
+        
+          
+          
+        
+          
+          
+        
+          
+          
+        
+      
+        
+          
+          
+        
+          
+          
+            
+              
+  <section class="widget toc-wrapper">
+    
+<header class="pure">
+  <div><i class="fas fa-list fa-fw" aria-hidden="true"></i>&nbsp;&nbsp;本文目录</div>
+  
+    <!-- <div class='wrapper'><a class="s-toc rightBtn" rel="external nofollow noopener noreferrer" href="javascript:void(0)"><i class="fas fa-thumbtack fa-fw"></i></a></div> -->
+  
+</header>
+
+    <div class="content pure">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、序列式容器-顺序容器"><span class="toc-text">一、序列式容器/顺序容器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-向量-vector"><span class="toc-text">1. 向量(vector)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-列表-list"><span class="toc-text">2. 列表 (list)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-双端队列-deque"><span class="toc-text">3. 双端队列(deque)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-栈-stack"><span class="toc-text">4. 栈(stack)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-队列-queue"><span class="toc-text">5. 队列(queue)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-优先队列-priority-queue"><span class="toc-text">6. 优先队列(priority_queue )</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、关联式容器"><span class="toc-text">二、关联式容器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-集合-set"><span class="toc-text">1. 集合(set)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-键值对-map"><span class="toc-text">2. 键值对(map)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-红黑树"><span class="toc-text">3. 红黑树</span></a></li></ol></li></ol>
+    </div>
+  </section>
+
+
+            
+          
+        
+          
+          
+        
+          
+          
+        
+          
+          
+        
+          
+          
+        
+          
+          
+        
+      
+    
+
+  
+</aside>
+
+<footer id="footer" class="clearfix">
+  
+  
+    <div class="social-wrapper">
+      
+        
+          <a href="/atom.xml" class="social fas fa-rss flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="mailto:ddssingsong@163.com" class="social fas fa-envelope flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://github.com/ddssingsong" class="social fab fa-github flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+        
+          <a href="https://music.163.com/#/song?id=523696075" class="social fas fa-headphones-alt flat-btn" target="_blank" rel="external nofollow noopener noreferrer">
+          </a>
+        
+      
+    </div>
+  
+  <br>
+  <div><p>博客内容遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">署名-非商业性使用-相同方式共享 4.0 国际 (CC BY-NC-SA 4.0) 协议</a></p>
+</div>
+  <div>
+    本站使用
+    <a href="https://xaoxuu.com/wiki/material-x/" target="_blank" class="codename">Material X</a>
+    作为主题
+    
+      ，
+      总访问量为
+      <span id="busuanzi_value_site_pv"><i class="fas fa-spinner fa-spin fa-fw" aria-hidden="true"></i></span>
+      次
+    
+    。
+  </div>
+</footer>
+<script>setLoadingBarProgress(80);</script>
+
+
+      <script>setLoadingBarProgress(60);</script>
+    </div>
+    <a class="s-top fas fa-arrow-up fa-fw" href='javascript:void(0)'></a>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+
+  <script>
+    var GOOGLE_CUSTOM_SEARCH_API_KEY = "";
+    var GOOGLE_CUSTOM_SEARCH_ENGINE_ID = "";
+    var ALGOLIA_API_KEY = "";
+    var ALGOLIA_APP_ID = "";
+    var ALGOLIA_INDEX_NAME = "";
+    var AZURE_SERVICE_NAME = "";
+    var AZURE_INDEX_NAME = "";
+    var AZURE_QUERY_KEY = "";
+    var BAIDU_API_ID = "";
+    var SEARCH_SERVICE = "hexo" || "hexo";
+    var ROOT = "/"||"/";
+    if(!ROOT.endsWith('/'))ROOT += '/';
+  </script>
+
+<script src="//instant.page/1.2.2" type="module" integrity="sha384-2xV8M5griQmzyiY3CDqh1dn4z3llDVqZDqzjzcY+jCBCk/a5fXJmuZ/40JJAPeoU"></script>
+
+
+  <script async src="https://cdn.jsdelivr.net/npm/scrollreveal@4.0.5/dist/scrollreveal.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      const $reveal = $('.reveal');
+      if ($reveal.length === 0) return;
+      const sr = ScrollReveal({ distance: 0 });
+      sr.reveal('.reveal');
+    });
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/node-waves@0.7.6/dist/waves.min.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      Waves.attach('.flat-btn', ['waves-button']);
+      Waves.attach('.float-btn', ['waves-button', 'waves-float']);
+      Waves.attach('.float-btn-light', ['waves-button', 'waves-float', 'waves-light']);
+      Waves.attach('.flat-box', ['waves-block']);
+      Waves.attach('.float-box', ['waves-block', 'waves-float']);
+      Waves.attach('.waves-image');
+      Waves.init();
+    });
+  </script>
+
+
+  <script async src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-busuanzi@2.3/js/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+  
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.4/jquery.backstretch.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        if ('.cover') {
+          $('.cover').backstretch(
+          ["https://img.vim-cn.com/29/91197b04c13f512f734a76d4ac422d89dbe229.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        } else {
+          $.backstretch(
+          ["https://img.vim-cn.com/29/91197b04c13f512f734a76d4ac422d89dbe229.jpg"],
+          {
+            duration: "6000",
+            fade: "2500"
+          });
+        }
+      });
+    </script>
+  
+
+
+
+
+
+
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  
+    
+      <script src="https://cdn.jsdelivr.net/gh/xaoxuu/volantis@1.0.6/js/volantis.min.js"></script>
+    
+  
+  <script>
+  var GUEST_INFO = ['nick','mail','link'];
+  var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+    return GUEST_INFO.indexOf(item) > -1
+  });
+  var notify = 'true' == true;
+  var verify = 'true' == true;
+  var valine = new Valine();
+  valine.init({
+    el: '#valine_container',
+    notify: notify,
+    verify: verify,
+    guest_info: guest_info,
+    
+    appId: "StY0COESh8VDhgtMxTvWGoKm-gzGzoHsz",
+    appKey: "EIDNpekxDzlRSLk36J1yYqGX",
+    placeholder: "快来评论吧~",
+    pageSize:'10',
+    avatar:'mp',
+    lang:'zh-cn',
+    highlight:'true'
+  })
+  </script>
+
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.9/js/app.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/gh/xaoxuu/cdn-material-x@19.9/js/search.js"></script>
+
+
+
+
+<!-- 复制 -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  let COPY_SUCCESS = "复制成功";
+  let COPY_FAILURE = "复制失败";
+  /*页面载入完成后，创建复制按钮*/
+  !function (e, t, a) {
+    /* code */
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '  <i class="fa fa-copy"></i><span>复制</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+
+      clipboard.on('success', function(e) {
+        //您可以加入成功提示
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+        success_prompt(COPY_SUCCESS);
+        e.clearSelection();
+      });
+      clipboard.on('error', function(e) {
+        //您可以加入失败提示
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+        fail_prompt(COPY_FAILURE);
+      });
+    }
+    initCopyCode();
+
+  }(window, document);
+
+  /**
+   * 弹出式提示框，默认1.5秒自动消失
+   * @param message 提示信息
+   * @param style 提示样式，有alert-success、alert-danger、alert-warning、alert-info
+   * @param time 消失时间
+   */
+  var prompt = function (message, style, time)
+  {
+      style = (style === undefined) ? 'alert-success' : style;
+      time = (time === undefined) ? 1500 : time*1000;
+      $('<div>')
+          .appendTo('body')
+          .addClass('alert ' + style)
+          .html(message)
+          .show()
+          .delay(time)
+          .fadeOut();
+  };
+
+  // 成功提示
+  var success_prompt = function(message, time)
+  {
+      prompt(message, 'alert-success', time);
+  };
+
+  // 失败提示
+  var fail_prompt = function(message, time)
+  {
+      prompt(message, 'alert-danger', time);
+  };
+
+  // 提醒
+  var warning_prompt = function(message, time)
+  {
+      prompt(message, 'alert-warning', time);
+  };
+
+  // 信息提示
+  var info_prompt = function(message, time)
+  {
+      prompt(message, 'alert-info', time);
+  };
+
+</script>
+
+
+<!-- fancybox -->
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+<script>
+  let LAZY_LOAD_IMAGE = "";
+  $(".article-entry").find("fancybox").find("img").each(function () {
+      var element = document.createElement("a");
+      $(element).attr("data-fancybox", "gallery");
+      $(element).attr("href", $(this).attr("src"));
+      /* 图片采用懒加载处理时,
+       * 一般图片标签内会有个属性名来存放图片的真实地址，比如 data-original,
+       * 那么此处将原本的属性名src替换为对应属性名data-original,
+       * 修改如下
+       */
+       if (LAZY_LOAD_IMAGE) {
+         $(element).attr("href", $(this).attr("data-original"));
+       }
+      $(this).wrap(element);
+  });
+</script>
+
+
+
+
+
+  <script>setLoadingBarProgress(100);</script>
+</body>
+</html>

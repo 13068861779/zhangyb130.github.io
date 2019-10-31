@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   
-  <title>【NDK系列1】基本数据类型和内存格局 | 哒哒瑟</title>
+  <title>【NDK系列1】c语言基本数据类型和内存布局 | 哒哒瑟</title>
   
   <meta name="keywords" content="Android,Java,Linux">
   
@@ -185,7 +185,7 @@
   
     <h1 class="title">
       <a href="/android/ndk/ndk-1/">
-        【NDK系列1】基本数据类型和内存格局
+        【NDK系列1】c语言基本数据类型和内存布局
       </a>
     </h1>
   
@@ -216,7 +216,7 @@
             <div class="new-meta-item date">
   <a class="notlink">
     <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-    <p>2019-10-28</p>
+    <p>2019-10-01</p>
   </a>
 </div>
 
@@ -268,10 +268,14 @@
 
     <section class="article typo">
       <div class="article-entry" itemprop="articleBody">
-        <p>作为一个Android开发者，怎能不会NDK开发，下面我们开始我们的NDK之旅</p>
+        <p>这是我们NDK学习的第一课，了解下c语言的<strong>数据类型</strong>和数组的<strong>内存布局</strong></p>
 <a id="more"></a>
-<p>怎么搭建环境我们暂且不管，随心而为</p>
-<h2 id="1-基本数据类型"><a href="#1-基本数据类型" class="headerlink" title="1. 基本数据类型"></a>1. 基本数据类型</h2><p>1.<strong>signed</strong>—有符号，可修饰 char、int。Int是默认有符号的。<br>2.<strong>unsigned</strong>—无符号，可修饰 int 、char</p>
+<h2 id="一、基本数据类型"><a href="#一、基本数据类型" class="headerlink" title="一、基本数据类型"></a>一、基本数据类型</h2><h3 id="1-整数类型"><a href="#1-整数类型" class="headerlink" title="1. 整数类型"></a>1. 整数类型</h3><ul>
+<li><strong>signed</strong>——&gt;有符号，可修饰 char、int。Int是默认有符号的。</li>
+<li><strong>unsigned</strong>——&gt;无符号，可修饰 int 、char</li>
+</ul>
+<p><br></p>
+<p>基本类型如下</p>
 <table>
 <thead>
 <tr>
@@ -332,14 +336,19 @@
 </tr>
 </tbody>
 </table>
-<p>为了得到某个类型或某个变量在特定平台上的准确大小，使用 sizeof 运算符。</p>
+<p><br></p>
+<p><strong>tips:</strong></p>
+<ol>
+<li><p>为了得到某个类型或某个变量在特定平台上的准确大小，使用 sizeof 运算符。</p>
 <p>表达式 sizeof(type) 得到对象或类型的存储字节大小。</p>
-<p>long int 其实就是长整型 = long 可以省去int</p>
-<p>在标准中,规定 int至少和short一样长，long至少和int一样长。</p>
-<p><strong>问题探究：</strong></p>
-<p><strong>为什么会存在long?</strong></p>
+</li>
+<li><p>long int 其实就是长整型 = long 可以省去int，在标准中,规定 int至少和short一样长，long至少和int一样长。</p>
+</li>
+<li><p>为什么会存在long?</p>
 <p>long和int在早期16位电脑时候 int 2字节，long 4字节，而计算机发展到现在，一般32、64下，long和int一样。和java类比的话，java的long就是 long long 8字节</p>
-<p><strong>格式化显示</strong></p>
+</li>
+</ol>
+<h3 id="2-浮点数类型"><a href="#2-浮点数类型" class="headerlink" title="2. 浮点数类型"></a>2. 浮点数类型</h3><p>浮点数类型如下</p>
 <table>
 <thead>
 <tr>
@@ -370,26 +379,50 @@
 </tr>
 </tbody>
 </table>
-<p>8进制             %o<br>16进制            小写： %x    大写：%X<br>(0x)+16进制前面     %#x </p>
-<p><strong>其他一些东西</strong></p>
-<p>C99标准以前，C语言里面是没有bool，C++里面才有，<br>C99标准里面定义了bool类型，需要引入头文件stdbool.h<br>bool类型有只有两个值：true =1 、false=0。<br>因此实际上bool就是一个int<br>所以在c/c++中 if 遵循一个规则， 非0为true，非空为true；<br>NULL 其实也就是被define为了 0 </p>
-<h2 id="2-格式化"><a href="#2-格式化" class="headerlink" title="2. 格式化"></a>2. 格式化</h2><p>printf、sprintf等</p>
+<h3 id="3-其他"><a href="#3-其他" class="headerlink" title="3. 其他"></a>3. 其他</h3><p>关于8进制和16进制的打印显示</p>
+<table>
+<thead>
+<tr>
+<th>进制</th>
+<th>打印参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8进制</td>
+<td>%o</td>
+</tr>
+<tr>
+<td>16进制</td>
+<td>小写： %x    大写：%X</td>
+</tr>
+<tr>
+<td>(0x)+16进制</td>
+<td>%#x</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p><strong>tips :</strong></p>
+<p> C99标准以前，C语言里面是没有bool，C++里面才有，C99标准里面定义了bool类型，需要引入头文件stdbool.h<br>bool类型有只有两个值：<strong>true =1 、false=0</strong>，因此实际上bool就是一个int所以在c/c++中 if 遵循一个规则， <strong>非0为true，非空为true</strong>；NULL 其实也就是被define为了 0 </p>
+<h2 id="二、格式化输出"><a href="#二、格式化输出" class="headerlink" title="二、格式化输出"></a>二、格式化输出</h2><p>函数printf、sprintf</p>
 <p>将格式化的数据写入第一个参数</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> str[<span class="number">100</span>];</span><br><span class="line"><span class="built_in">sprintf</span>(str, <span class="string">"img/png_%d.png"</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%s"</span>, str);</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用 0 补到3个字符</span></span><br><span class="line"><span class="built_in">sprintf</span>(str, <span class="string">"img/png_%03d.png"</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%s"</span>, str);</span><br></pre></td></tr></table></figure>
-<h2 id="3-数组与内存布局"><a href="#3-数组与内存布局" class="headerlink" title="3. 数组与内存布局"></a>3. 数组与内存布局</h2><p>数组  ： 连续的内存</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 打印</span></span><br><span class="line"><span class="keyword">char</span> str[<span class="number">100</span>];</span><br><span class="line"><span class="built_in">sprintf</span>(str, <span class="string">"img/png_%d.png"</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%s"</span>, str);</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用 0 补到3个字符</span></span><br><span class="line"><span class="built_in">sprintf</span>(str, <span class="string">"img/png_%03d.png"</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%s"</span>, str);</span><br></pre></td></tr></table></figure>
+<h2 id="三、数组与内存布局"><a href="#三、数组与内存布局" class="headerlink" title="三、数组与内存布局"></a>三、数组与内存布局</h2><p>数组 ： 连续的内存</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//java</span></span><br><span class="line"><span class="keyword">int</span>[] a</span><br><span class="line"></span><br><span class="line"><span class="comment">//c</span></span><br><span class="line"><span class="comment">//必须声明时候确定大小</span></span><br><span class="line"><span class="keyword">int</span> a[<span class="number">10</span>]  </span><br><span class="line"><span class="comment">//或者 直接初始化 </span></span><br><span class="line"><span class="keyword">int</span> a[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//大小</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d"</span>,<span class="keyword">sizeof</span>(a)/<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br></pre></td></tr></table></figure>
-<p>栈内存限制  linux：ulimit -a 查看<br>但是直接分配这么大不行，因为堆栈可能保存参数，返回地址等等信息</p>
-<p><strong>动态内存申请</strong></p>
-<p><strong>malloc</strong><br>    没有初始化内存的内容,一般调用函数memset来初始化这部分的内存空间.</p>
-<p><strong>calloc</strong><br>    申请内存并将初始化内存数据为NULL.</p>
+<p><strong>tips</strong></p>
+<p>栈内存限制 查看 linux：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ulimit -a</span><br></pre></td></tr></table></figure>
+<p>但是直接分配这么大不行，因为堆栈可能保存参数，返回地址等等信息</p>
+<h3 id="1-动态内存申请"><a href="#1-动态内存申请" class="headerlink" title="1. 动态内存申请"></a>1. 动态内存申请</h3><h4 id="malloc"><a href="#malloc" class="headerlink" title="malloc"></a>malloc</h4><p>​    没有初始化内存的内容,一般调用函数memset来初始化这部分的内存空间.</p>
+<h4 id="calloc"><a href="#calloc" class="headerlink" title="calloc"></a>calloc</h4><p>​    申请内存并将初始化内存数据为NULL.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> pn = (<span class="keyword">int</span>)<span class="built_in">calloc</span>(<span class="number">10</span>, <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br></pre></td></tr></table></figure>
-<p><strong>realloc</strong></p>
-<p>​     对malloc申请的内存进行大小的调整.</p>
+<h4 id="realloc"><a href="#realloc" class="headerlink" title="realloc"></a>realloc</h4><p>​     对malloc申请的内存进行大小的调整.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> *a = (<span class="keyword">char</span>*)<span class="built_in">malloc</span>(<span class="number">10</span>);</span><br><span class="line"><span class="built_in">realloc</span>(a,<span class="number">20</span>);</span><br></pre></td></tr></table></figure>
-<p>特别的：<br><strong>alloca</strong><br>    在栈申请内存,因此无需释放.</p>
+<h4 id="alloca"><a href="#alloca" class="headerlink" title="alloca"></a>alloca</h4><p>特别的：在栈申请内存,因此无需释放.</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> *p = (<span class="keyword">int</span> *)alloca(<span class="keyword">sizeof</span>(<span class="keyword">int</span>) * <span class="number">10</span>);</span><br></pre></td></tr></table></figure>
-<p><strong>物理内存</strong><br>    物理内存指通过物理内存条而获得的内存空间</p>
-<p><strong>虚拟内存</strong><br>    一种内存管理技术<br>    电脑中所运行的程序均需经由内存执行，若执行的程序占用内存很大，则会导致内存消耗殆尽。<br>    虚拟内存技术还会匀出一部分硬盘空间来充当内存使用。</p>
+<h3 id="2-物理内存和虚拟内存"><a href="#2-物理内存和虚拟内存" class="headerlink" title="2. 物理内存和虚拟内存"></a>2. 物理内存和虚拟内存</h3><h4 id="物理内存"><a href="#物理内存" class="headerlink" title="物理内存"></a>物理内存</h4><p>​    物理内存指通过物理内存条而获得的内存空间</p>
+<h4 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h4><p>​    一种内存管理技术<br>​    电脑中所运行的程序均需经由内存执行，若执行的程序占用内存很大，则会导致内存消耗殆尽。<br>​    虚拟内存技术还会匀出一部分硬盘空间来充当内存使用。</p>
 <p><img src="https://img-blog.csdnimg.cn/2019061821310711.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTEwNzcwMjc=,size_16,color_FFFFFF,t_70" alt=""></p>
 <p>进程分配内存主要由两个系统调用完成：<strong>brk和mmap</strong> 。</p>
 <ol>
@@ -402,7 +435,7 @@
 <blockquote>
 <p>栈是向低地址扩展数据结构<br>堆是向高地址扩展数据结构</p>
 </blockquote>
-<h2 id="4-代码收录"><a href="#4-代码收录" class="headerlink" title="4. 代码收录"></a>4. 代码收录</h2><p><a href="https://github.com/ddssingsong/AnyNdk" target="_blank" rel="noopener">https://github.com/ddssingsong/AnyNdk</a></p>
+<h2 id="代码收录"><a href="#代码收录" class="headerlink" title="代码收录"></a>代码收录</h2><p><a href="https://github.com/ddssingsong/AnyNdk" target="_blank" rel="noopener">https://github.com/ddssingsong/AnyNdk</a></p>
 
       </div>
       
@@ -414,10 +447,10 @@
     <div class="new-meta-box">
       
         
-          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-28T17:04:41+08:00">
+          <div class="new-meta-item date" itemprop="dateUpdated" datetime="2019-10-31T11:08:20+08:00">
   <a class="notlink">
     <i class="fas fa-clock" aria-hidden="true"></i>
-    <p>更新于 2019年10月28日</p>
+    <p>更新于 2019年10月31日</p>
   </a>
 </div>
 
@@ -437,7 +470,7 @@
   <div class="-mob-share-list share-body">
     
       
-        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://ddssingsong.github.io/android/ndk/ndk-1/&title=【NDK系列1】基本数据类型和内存格局 | 哒哒瑟&summary=作为一个Android开发者，怎能不会NDK开发，下面我们开始我们的NDK之旅">
+        <a class="-mob-share-qq" title="QQ好友" rel="external nofollow noopener noreferrer" href="http://connect.qq.com/widget/shareqq/index.html?url=https://ddssingsong.github.io/android/ndk/ndk-1/&title=【NDK系列1】c语言基本数据类型和内存布局 | 哒哒瑟&summary=这是我们NDK学习的第一课，了解下c语言的数据类型和数组的内存布局">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qq.png">
           
@@ -445,7 +478,7 @@
       
     
       
-        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://ddssingsong.github.io/android/ndk/ndk-1/&title=【NDK系列1】基本数据类型和内存格局 | 哒哒瑟&summary=作为一个Android开发者，怎能不会NDK开发，下面我们开始我们的NDK之旅">
+        <a class="-mob-share-qzone" title="QQ空间" rel="external nofollow noopener noreferrer" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=https://ddssingsong.github.io/android/ndk/ndk-1/&title=【NDK系列1】c语言基本数据类型和内存布局 | 哒哒瑟&summary=这是我们NDK学习的第一课，了解下c语言的数据类型和数组的内存布局">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/qzone.png">
           
@@ -461,7 +494,7 @@
       
     
       
-        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://ddssingsong.github.io/android/ndk/ndk-1/&title=【NDK系列1】基本数据类型和内存格局 | 哒哒瑟&summary=作为一个Android开发者，怎能不会NDK开发，下面我们开始我们的NDK之旅">
+        <a class="-mob-share-weibo" title="微博" rel="external nofollow noopener noreferrer" href="http://service.weibo.com/share/share.php?url=https://ddssingsong.github.io/android/ndk/ndk-1/&title=【NDK系列1】c语言基本数据类型和内存布局 | 哒哒瑟&summary=这是我们NDK学习的第一课，了解下c语言的数据类型和数组的内存布局">
           
             <img src="https://cdn.jsdelivr.net/gh/xaoxuu/assets@19.1.9/logo/128/weibo.png">
           
@@ -487,9 +520,9 @@
                       <span class="art-item-left">
                           <h6><i class="fas fa-chevron-left" aria-hidden="true"></i>&nbsp;上一页</h6>
                           <h4>
-                              <a href="/android/ndk/ndk-12/" rel="prev" title="【NDK系列12】编译器 clang gcc g++">
+                              <a href="/android/ndk/ndk-2/" rel="prev" title="【NDK系列2】c语言 指针、函数、预处理器">
                                 
-                                    【NDK系列12】编译器 clang gcc g++
+                                    【NDK系列2】c语言 指针、函数、预处理器
                                 
                               </a>
                           </h4>
@@ -560,7 +593,7 @@
 
   <script>
     window.subData = {
-      title: '【NDK系列1】基本数据类型和内存格局',
+      title: '【NDK系列1】c语言基本数据类型和内存布局',
       tools: true
     }
   </script>
@@ -599,9 +632,9 @@
     <div class="content pure">
       <ul class="entry">
         
-          <li><a class="flat-box" title="/blog/categories/Android/" href="/blog/categories/Android/"><div class="name">Android</div><div class="badge">(2)</div></a></li>
+          <li><a class="flat-box" title="/blog/categories/Android/" href="/blog/categories/Android/"><div class="name">Android</div><div class="badge">(8)</div></a></li>
         
-          <li><a class="flat-box child" title="/blog/categories/Android/NDK/" href="/blog/categories/Android/NDK/"><div class="name">NDK</div><div class="badge">(2)</div></a></li>
+          <li><a class="flat-box child" title="/blog/categories/Android/NDK/" href="/blog/categories/Android/NDK/"><div class="name">NDK</div><div class="badge">(8)</div></a></li>
         
           <li><a class="flat-box" title="/blog/categories/Hexo/" href="/blog/categories/Hexo/"><div class="name">Hexo</div><div class="badge">(11)</div></a></li>
         
@@ -647,7 +680,7 @@
 </header>
 
     <div class="content pure">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-基本数据类型"><span class="toc-text">1. 基本数据类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-格式化"><span class="toc-text">2. 格式化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-数组与内存布局"><span class="toc-text">3. 数组与内存布局</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-代码收录"><span class="toc-text">4. 代码收录</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、基本数据类型"><span class="toc-text">一、基本数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-整数类型"><span class="toc-text">1. 整数类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-浮点数类型"><span class="toc-text">2. 浮点数类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-其他"><span class="toc-text">3. 其他</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、格式化输出"><span class="toc-text">二、格式化输出</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、数组与内存布局"><span class="toc-text">三、数组与内存布局</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-动态内存申请"><span class="toc-text">1. 动态内存申请</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#malloc"><span class="toc-text">malloc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#calloc"><span class="toc-text">calloc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#realloc"><span class="toc-text">realloc</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#alloca"><span class="toc-text">alloca</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-物理内存和虚拟内存"><span class="toc-text">2. 物理内存和虚拟内存</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#物理内存"><span class="toc-text">物理内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#虚拟内存"><span class="toc-text">虚拟内存</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码收录"><span class="toc-text">代码收录</span></a></li></ol>
     </div>
   </section>
 
